@@ -13,7 +13,7 @@ clust <- makePSOCKcluster(names = c("greywagtail",
                                     "greypartridge",
                                     "greyplover"))
 
-clusterEvalQ(cl = clust, source("beta_example.R"))
+clusterEvalQ(cl = clust, source("~/Workspace/GirlsProject/beta_example.R"))
 
 lambda <- clusterApplyLB(clust, shards, BetaMH, N=n_iter, sigma=sigma, alpha_prior=1/nr_servers, beta_prior=1/nr_servers)
 
