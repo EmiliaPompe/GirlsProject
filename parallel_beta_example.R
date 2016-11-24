@@ -8,13 +8,12 @@ n_iter = 10000
 burn_in = 0.1*n_iter
 sigma = 0.001
 
-
 clust <- makePSOCKcluster(names = c("greywagtail",
                                     "greyheron",
                                     "greypartridge",
                                     "greyplover"))
 
-clusterEvalQ(cl = clust, source("~/R/beta_example.R"))
+clusterEvalQ(cl = clust, source("~/Workspace/GirlsProject/beta_example.R"))
 
 lambda <- clusterApplyLB(clust, shards, BetaMH, N=n_iter, sigma=sigma, alpha_prior=1/nr_servers, beta_prior=1/nr_servers)
 
