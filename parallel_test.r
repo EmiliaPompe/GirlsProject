@@ -1,4 +1,7 @@
 library(parallel)
+
+
+
 clust <- makePSOCKcluster(names = c("greywagtail",
                                    "greyheron",
                                    "greypartridge",
@@ -6,4 +9,3 @@ clust <- makePSOCKcluster(names = c("greywagtail",
 
 clusterEvalQ(cl = clust, expr = system("hostname"))
 stopCluster(clust)
-
