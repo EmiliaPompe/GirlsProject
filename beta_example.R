@@ -9,7 +9,7 @@ BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prio
   #               x_0         - starting point of our Markov chain   
   # alpha_prior & beta_prior  - parameters of the prior Beta distribution
   #               sigma       - sd of the proposal (Normal) distribution
-  
+  #
   acc <- 0
   x <- vector("numeric", N+1)
   x[1] <- x_0
