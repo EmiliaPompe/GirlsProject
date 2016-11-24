@@ -1,18 +1,18 @@
 
 BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prior = 1, sigma = 0.2){
-  # MHalgo is an implementation of an M-H algorithm for the Beta - Bernoulli model
+  # BetaMH is an implementation of an M-H algorithm for the Beta - Bernoulli model
   # the posterior (target distribution) is Beta(alpha_prior + nr_successes, beta_prior + nr_trials)
   # the proposal distribution is normal with sd = sigma
   
-  # MHAlgo args: observations - numeric vector of observations
-  #               N           - number of iterations
-  #               x_0         - starting point of our Markov chain   
-  # alpha_prior & beta_prior  - parameters of the prior Beta distribution
-  #               sigma       - sd of the proposal (Normal) distribution
+  # BetaMH args:  observations - numeric vector of observations
+  #               N            - number of iterations
+  #               x_0          - starting point of our Markov chain   
+  # alpha_prior & beta_prior   - parameters of the prior Beta distribution
+  #               sigma        - sd of the proposal (Normal) distribution
   
   acc <- 0
-  x <- vector("numeric", N+1)
-  x[1] <- x_0
+  x <- vector("numeric", N+1)  #vector to store the values of the Markov Chain
+  x[1] <- x_0                  #store initial value
   nr_successes <- sum(observations==1)
   nr_trials <- length(observations)
   for (i in seq_len(N)){
@@ -21,8 +21,8 @@ BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prio
     
     # TO DO make sure that the ratio below is correct
     #if((x_proposed > 0) & (x_proposed <1)){
-      #ratio  <-  (x_proposed/x[i])^(alpha_prior - 1 + nr_success)*((1-x_proposed)/(1-x[i]))^(beta_prior - 1 + nr_trials)
-     ratio <- dbeta(x_proposed, alpha_prior + nr_successes, beta_prior + nr_trials - nr_successes)/dbeta(x[i], alpha_prior + nr_successes, beta_prior + nr_trials - nr_successes)
+    #ratio  <-  (x_proposed/x[i])^(alpha_prior - 1 + nr_success)*((1-x_proposed)/(1-x[i]))^(beta_prior - 1 + nr_trials)
+    ratio <- dbeta(x_proposed, alpha_prior + nr_successes, beta_prior + nr_trials - nr_successes)/dbeta(x[i], alpha_prior + nr_successes, beta_prior + nr_trials - nr_successes)
     #} else {
      # ratio <- 0
     #}
