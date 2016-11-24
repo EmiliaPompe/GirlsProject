@@ -4,7 +4,7 @@ MH <- function(data, d = 1, n_iter = 1000, initial_value, prior_par, proposal_di
   # data          - vector of data
   # n_iter        - number of iterations
   # initial_value - starting point of our Markov chain   
-  # prior_par     - vector or list of prior parameters for that need to be passed to the target distr. to update the pars
+  # prior_par     - vector or list of prior parameters  be passed to the target distr. to update the pars
   # proposal d.   - distribution used to proposed a new value together with prop_par
   # prop_par      - value of the parameters to be passed to the proposal distribution (mean and sd for normal)
   # target d.     - posterior distribution can be a Beta, a univariate Gaussian dist or a multivariate Gaussian
@@ -18,13 +18,13 @@ MH <- function(data, d = 1, n_iter = 1000, initial_value, prior_par, proposal_di
   for (i in seq_len(n_iter)){
     
     # we propose a value sampled from the proposal_distribution with par = prop_par
-    x_proposed = proposal_distribution(prop_par)
+    x_proposed = proposal_distribution(x[i],prop_par)
     
     # assuming a symmetric proposal distribution the accept. probability reduces to the ratio of target distrbutions
     ratio = target_distribution(x_proposed, data, prior_par, ...)/target_distribution(x[i], data, prior_par, ...)
     
     # acceptance step
-    if(runif(1) < min(c(1, ratio))){
+    if(runif(1, 0,1) < min(c(1, ratio))){
       x[i+1,] <- x_proposed
       acc <- acc +1
     } else {
