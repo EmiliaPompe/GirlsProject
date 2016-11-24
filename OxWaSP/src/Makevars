@@ -1,0 +1,10 @@
+PKG_CFLAGS = -I ~/usr/local/include -march=native -mtune=native -std=c11 -fopenmp
+PKG_LIBS = -L ~/usr/local/lib -lgsl -lopenblas -L/opt/cuda-8.0/lib64 -lcudart
+
+all: $(SHLIB)
+
+ssq_ispc.o: ssq_ispc.c
+	ispc -O3 --arch=x86-64 --target=avx ssq_ispc.c -o ssq_ispc.o
+
+vecadd.o: vecadd.c
+	/opt/cuda-8.0/bin/nvcc -c vecadd.c -x cu -m64 -O3 -gencode=arch=compute_35,code=compute_35 --ptxas-options=-v --use_fast_math --compiler-options '-fPIC'
