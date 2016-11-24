@@ -1,5 +1,5 @@
 
-MHAlgo <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prior = 1, sigma = 0.2){
+BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prior = 1, sigma = 0.2){
   # MHalgo is an implementation of an M-H algorithm for the Beta - Bernoulli model
   # the posterior (target distribution) is Beta(alpha_prior + nr_successes, beta_prior + nr_trials)
   # the proposal distribution is normal with sd = sigma
@@ -36,26 +36,3 @@ MHAlgo <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prio
   }
   return(list(x=x, acc=acc))
 }
-
-# example
-observations <- c(1, rep(0, times=999))
-result <- MHAlgo(observations, 10000, sigma =0.001)
-markov_chain <- result$x
-result$acc/10000
-
-plot(1000:10000, markov_chain[1000:10000], type='line')
-acf(markov_chain)
-hist(markov_chain[1000:10000], 50, col='blue')
-hist(rbeta(9000, 2, 1001), 50, col='red', alpha=0.9, add=TRUE)
-
-markov_chain <- MHAlgo(observations, 1000000, sigma = 1)
-hist(markov_chain[10000:100000], 50, col='blue')
-hist(rbeta(90000, 2, 1000), 50, col='red', alpha=0.5, add=TRUE)
-par(mfrow=c(1,1))
-
-acf(markov_chain[10000:1000000], main='ble2')
-
-par(mfrow=c(1,3))
-plot(density(markov_chain[10000:100000]), xlim=c(0,0.016))
-plot(density(rbeta(90000, 2, 1000)), col='red', add=TRUE, xlim=c(0,0.016))
-plot(density(rbeta(90000, 2, 1001)), col='red', add=TRUE, xlim=c(0,0.016))
