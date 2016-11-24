@@ -1,5 +1,5 @@
 
-BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prior = 1, sigma = 0.2){
+BetaMH <- function(observations, N = 1000, x_0 = 0.1, alpha_prior = 1, beta_prior = 1, sigma = 0.1){
   # BetaMH is an implementation of an M-H algorithm for the Beta - Bernoulli model
   # the posterior (target distribution) is Beta(alpha_prior + nr_successes, beta_prior + nr_trials)
   # the proposal distribution is normal with sd = sigma#
