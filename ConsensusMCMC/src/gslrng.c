@@ -25,7 +25,7 @@ double min(double a, double b)
     return(b);   
 }
 
-void BetaMH(long *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
+void BetaMH(int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
 {
   static gsl_rng *restrict rP = NULL;
   
