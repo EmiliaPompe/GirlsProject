@@ -25,29 +25,39 @@ double min(double a, double b)
     return(b);   
 }
 
-void metropolis_hastings(long *nP, double *alphaP, double *vec_x)
+void BetaMH(long *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
 {
-  static gsl_rng *restrict r = NULL;
+  static gsl_rng *restrict rP = NULL;
   
-  if(r == NULL) { // First call to this function, setup RNG
+  if(rP == NULL) { // First call to this function, setup RNG
     gsl_rng_env_setup();
-    r = gsl_rng_alloc(gsl_rng_mt19937);
+    rP = gsl_rng_alloc(gsl_rng_mt19937);
   }
   
-  long n,i;
-  double alpha, x, x_proposed, u, acc_prob;
+  long n, i;
+  double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior;
+  int num_successes = 1, num_failures = 9;
+  
+  alpha_prior = *alpha_priorP;
+  beta_prior = *beta_priorP;
+  alpha_post = alpha_prior + (double) num_successes;
+  beta_post = beta_prior + (double) num_failures;
 
   n = *nP;
-  alpha = *alphaP;
-  x = 0.0;
-  vec_x[0] = x;
+  sigma = *sigmaP;
+  x = 0.1;
+  vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
   for (i=1; i<n; i++)
   {
-    x_proposed = x + gsl_ran_flat(r,-alpha,alpha);
-    acc_prob = min(1.0, gsl_ran_ugaussian_pdf(x_proposed)/gsl_ran_ugaussian_pdf(x));
-    u = gsl_ran_flat(r,0.0,1.0);
+    x_proposed = x + gsl_ran_gaussian(rP, sigma);
+    acc_prob = min(1.0, gsl_ran_beta_pdf(x_proposed, alpha_post, beta_post)/gsl_ran_beta_pdf(x, alpha_post, beta_post));
+    u = gsl_ran_flat(rP,0.0,1.0);
+    
     if (u < acc_prob)
+    {
       x = x_proposed;
-    vec_x[i] = x;
+    }
+      
+    vec_xP[i] = x;
   }
 }
