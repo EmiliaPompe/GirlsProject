@@ -3,46 +3,36 @@
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+#include "min.h"
 
-void rng(int *restrict n, double *restrict res) {
-  static gsl_rng *restrict r = NULL;
-  
-  if(r == NULL) { // First call to this function, setup RNG
-    gsl_rng_env_setup();
-    r = gsl_rng_alloc(gsl_rng_mt19937);
-  }
-  
-  for(size_t i=0; i<*n; ++i) {
-    res[i] = gsl_rng_uniform(r);
-  }
-}
-
-double min(double a, double b)
-{
-  if (a < b)
-    return(a);
-  else
-    return(b);   
-}
-
-void BetaMH(int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
+void BetaMH_v2( int *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
 {
   static gsl_rng *restrict rP = NULL;
   
-  if(rP == NULL) { // First call to this function, setup RNG
+  if(rP == NULL) {  //set up random numbers generator
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
   }
   
   long n, i;
   double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior, denom;
-  int num_successes = 1, num_failures = 999, acc_count = 0;
+  int acc_count, num_successes, data_len;
+  
+  acc_count = 0;
+  num_successes = 0;
+  data_len = *data_lenP;
+  
+  for (i=0; i<data_len; i++){
+    if (dataP[i]==1)
+      num_successes++;
+  }
   
   alpha_prior = *alpha_priorP;
   beta_prior = *beta_priorP;
   alpha_post = alpha_prior + (double) num_successes;
-  beta_post = beta_prior + (double) num_failures;
-
+  beta_post = beta_prior + (double) (data_len-num_successes);
+  printf("%lf/n", beta_post);
+  
   n = *nP;
   sigma = *sigmaP;
   x = 0.1;
@@ -66,8 +56,9 @@ void BetaMH(int *restrict nP, double *restrict sigmaP, double *restrict alpha_pr
       x = x_proposed;
       acc_count++;
     }
-      
+    
     vec_xP[i] = x;
   }
   printf("Acceptance rate: %lf\n", (float) acc_count/n);
 }
+
