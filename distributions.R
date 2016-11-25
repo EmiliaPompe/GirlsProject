@@ -15,15 +15,15 @@ beta_proposal_distribution = function(par){
 # when using the Univariate Normal par need a vector with 2 values
 # 1_value : value of the mean 
 # 2_value : value of the sd
-UNInormal_proposal_distribution = function(par){
-  rnorm(n = 1, mean=par[1], sd=par[2])
+UNInormal_proposal_distribution = function(x, par){
+  rnorm(n = 1, mean=x, sd=par[2])
 }
 
 # when using the Multivariate Normal proposal par need to be a list with 
 # $1: a vector of dim = d giving the means of the variables that is passed to mu
 # $2: a symmetric matrix dim = d*d specifying the covariance matrix of the variables that is passed to Sigma
-MULTInormal_proposal_distribution = function(par){  
-  mvrnorm(n = 1, mu=par[[1]], Sigma=par[[2]])
+MULTInormal_proposal_distribution = function(x, par){  
+  mvrnorm(n = 1, mu=x, Sigma=par[[2]])
 } 
 
 
