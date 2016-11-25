@@ -3,20 +3,21 @@
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
-#include "min.h"
+#include "utilities.h"
 
 void BetaMH_v2( int *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
 {
+  
+  long n, i;
+  double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior, denom;
+  int acc_count, num_successes, data_len;
+  
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
   }
-  
-  long n, i;
-  double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior, denom;
-  int acc_count, num_successes, data_len;
   
   acc_count = 0;
   num_successes = 0;
