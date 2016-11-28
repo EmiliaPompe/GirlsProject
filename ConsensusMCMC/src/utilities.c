@@ -28,3 +28,26 @@ int sumInt(int *v, int length_v){
   return(sum_val);
   
 }
+
+
+double * subtractConst(double *v, int length_v, double constant)
+{
+  int i;
+  
+  for (i=0; i<length_v; i++){
+    v[i] -= constant;
+  }
+  return(v);
+}
+
+double * squareVectElementwise(double *v, int length_v)
+{
+  int i;
+  
+  for (i=0; i<length_v; i++){
+    v[i] = v[i]*v[i];
+  }
+  return(v);
+}
+
+
