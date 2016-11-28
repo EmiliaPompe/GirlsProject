@@ -20,25 +20,29 @@ p <- QQPlot(chain1=rnorm(100), chain2=rnorm(100))
 p 
 
 
-TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0, size_line = 1, ...){
+TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0.1, size_line = 1, ...){
   # TracePlot prepares a trace plot for one or several Markov chains
   # TracePlot args: list_of_vectors - a list containing vectors of our Markov chains (it may be a list of one vector only)  
   #                          method - a vector containing names of methods (usually c('single machine', 'several machines'))
-  #                         burn_in - a number of burned_in samples (not proportion)  
+  #                         burn_in - a proportion of samples to be burned_in  
   #                       size_line - size of the line in the plot 
   #  
   # TO DO solve the problem with burn_in (we want it to be the proportion)
   require(ggplot2)
   l <- list(...)
-  chain <- unlist(list_of_vectors)
-  iteration <- unlist(lapply(list_of_vectors, function(x) seq_len(length(x)) + burn_in -1))
-  df <- data.frame(chain=chain, iteration = iteration)
+  list_of_vectors_after_burn_in <- lapply(list_of_vectors, function(x){
+    x[floor(length(x)*burn_in):length(x)]
+  })
+  chain <- unlist(list_of_vectors_after_burn_in)
+  
+  iteration <- unlist(lapply(list_of_vectors, function(x) floor(length(x)*burn_in):length(x)))
+  df <- data.frame(chain = chain, iteration = iteration)
   
   if(is.null(method)){
     p <- ggplot(df, aes(x=iteration, y=chain)) + geom_line(size = size_line) +  l
   } else {
-    df$method <- unlist(lapply(seq_along(list_of_vectors), function(i) {
-      rep(method[i], times = length(list_of_vectors[[i]]))
+    df$method <- unlist(lapply(seq_along(list_of_vectors_after_burn_in), function(i) {
+      rep(method[i], times = length(list_of_vectors_after_burn_in[[i]]))
     }))
     
     p <- ggplot(df, aes(x=iteration, y=chain, col = method)) + geom_line(size = size_line) + l
@@ -47,22 +51,28 @@ TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0, size_line = 1
 }
 
 # example
-TracePlot(list(rnorm(100), rnorm(100)), method = c('single machine', 'several machines'), burn_in=100)
+TracePlot(list(rnorm(100), rnorm(100)), method = c('single machine', 'several machines'), burn_in=0.2)
 
 
-HistPlot <- function(list_of_vectors, method = NULL, size_line = 1,  ...){
-# TO DO add description
-# TO DO add burn_in periods  
+HistPlot <- function(list_of_vectors, method = NULL, burn_in =0.1, size_line = 1,  ...){
+# HistPlot prepares several (or one ) histogram of our Markov chains/chain - different colours applied to different methods
+# HistPlot args:  list_of_vectors - a list containing vectors of our Markov chains (it may be a list of one vector only)  
+#                          method - a vector containing names of methods (usually c('single machine', 'several machines'))
+#                         burn_in - a proportion of samples to be burned_in  
+#                       size_line - size of the line in the plot 
   require(ggplot2)
   l <- list(...)
-  chain <- unlist(list_of_vectors)
+  list_of_vectors_after_burn_in <- lapply(list_of_vectors, function(x){
+    x[floor(length(x)*burn_in):length(x)]
+  })
+  chain <- unlist(list_of_vectors_after_burn_in)
   df <- data.frame(chain=chain)
   
   if(is.null(method)){
     p <- ggplot(df, aes(x=chain)) + geom_density() +  l
   } else {
-    df$method <- unlist(lapply(seq_along(list_of_vectors), function(i) {
-      rep(method[i], times = length(list_of_vectors[[i]]))
+    df$method <- unlist(lapply(seq_along(list_of_vectors_after_burn_in), function(i) {
+      rep(method[i], times = length(list_of_vectors_after_burn_in[[i]]))
     }))
     
     p <- ggplot(df, aes(x = chain, col = method)) + geom_density(size = size_line) +  l
@@ -71,11 +81,24 @@ HistPlot <- function(list_of_vectors, method = NULL, size_line = 1,  ...){
 }
   
 
-HistPlot(list(rnorm(100), rnorm(100)), method = c('single machine', 'several machines'), size_line=2)
+HistPlot(list(rnorm(1000), rnorm(1000)), method = c('single machine', 'several machines'), 0.2, size_line=2)
 
 
-ACFPlot <- function(chain, ...){
-  require(ggplot)
+ACFPlot <- function(chain, lag.max = 10, ...){
+# TO DO: should this function consider a burn-in
+# ACFPlot prepares a plot of autocorrelations for subsequent lags
+# ACFPlot args:  chain - a vector of values of our Markov chain
+#             lag.max  - values of ACF for lag from 0 to lag.max will be displayed  
+  
+  require(ggplot2)
   l <- list(...)
-# TO DO finish this function  
+  
+  # creating a data frame with autocorrelations for subsequent values of lag
+  df <- with(acf(chain, lag.max, plot = FALSE), data.frame(lag, acf))
+  df$lag <- as.factor(df$lag)
+  p <- ggplot(df, aes(x = lag, y = acf)) + geom_bar(stat = "identity") + l
+  p
 }
+
+p <- ACFPlot(chain=rnorm(1000), 10, ggtitle('acf'))
+suppressWarnings(print(p))
