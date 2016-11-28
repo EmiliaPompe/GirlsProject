@@ -10,8 +10,8 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
 {
   
   int n, i;
-  double sigma, x, x_proposed, u, acc_prob, prior_ratio, log_lik_difference, s;
-  int acc_count;
+  double sigma, x, x_proposed, u, acc_prob, prior_ratio, log_lik_difference, theta_prior, k_prior, s;
+  int acc_count, data, data_len;
   
   static gsl_rng *restrict rP = NULL;
   
