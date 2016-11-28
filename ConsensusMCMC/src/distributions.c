@@ -83,7 +83,6 @@ double normalTargetDistribution(double *restrict xP, double *restrict dataP, int
 
 }
 
-
 double gammaTargetDistribution(double *restrict xP,  int *restrict dataP, int *restrict data_lenP, double *restrict k_priorP, double *restrict theta_priorP){
 
   double x, k_prior, theta_prior, target_val, k_post, theta_post;

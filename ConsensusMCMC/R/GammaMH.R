@@ -6,8 +6,8 @@ GammaMH <- function(data, n, sigma, k_prior, theta_prior) {
   return(ans$vec_xP)
 }
 
-data <- rpois(1000, 5)
-chain <- GammaMH(data, 100000, 0.9, 1,4) # our markov chain
-chain2 <- rgamma(1000000, 1 + sum(data), scale = 4/(4*length(data)+1)) # theoretical  posterior distribution
-HistPlot(list(chain, chain2), method = c('markov', 'theor'), 0.1, size_line=2)
+#data <- rpois(1000, 5)
+#chain <- GammaMH(data, 100000, 0.9, 1,4) # our markov chain
+#chain2 <- rgamma(1000000, 1 + sum(data), scale = 4/(4*length(data)+1)) # theoretical  posterior distribution
+#HistPlot(list(chain, chain2), method = c('markov', 'theor'), 0.1, size_line=2)
          
