@@ -10,8 +10,8 @@ void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP
 {
   
   int n, i;
-  double sigma, x, x_proposed, u, acc_prob ;
-  int acc_count;
+  double sigma, x, x_proposed, u, acc_prob, alpha_prior, beta_prior, data, s , prior_ratio, log_lik_difference;
+  int acc_count, data_len, num_successes;
   
   static gsl_rng *restrict rP = NULL;
   
@@ -21,16 +21,34 @@ void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP
   }
   
   acc_count = 0;
+  num_successes = 0;
+  data_len = *data_lenP;
+  
+  for (i=0; i<data_len; i++){
+    if (dataP[i]==1)
+      num_successes++;
+  }
   
   n = *nP;
   sigma = *sigmaP;
+  alpha_prior = *alpha_priorP ;
+  beta_prior = *beta_priorP ;
+  data = *dataP;
+  s = (double) *sP;
+  
   x = 0.1;
   vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
   for (i=1; i<n; i++)
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma); // random walk MH
     
-    acc_prob = min(1.0, betaTargetDistribution_v2(&x_proposed, dataP, data_lenP, alpha_priorP, beta_priorP, sP)/betaTargetDistribution_v2(&x, dataP, data_lenP, alpha_priorP, beta_priorP, sP));
+    prior_ratio = pow((pow(x_proposed, alpha_prior-1)*pow(1-x_proposed, beta_prior-1)/pow(x, alpha_prior-1)*pow(1-x, beta_prior-1)), (1.0/s) )
+    
+    log_lik_difference = num_successes*(log(x_proposed)) + (data_len-num_successes)*log(1-x_proposed) - num_successes*(log(x)) + (data_len-num_successes)*log(1-x)
+      
+    acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
+    
+    //acc_prob = min(1.0, betaTargetDistribution_v2(&x_proposed, dataP, data_lenP, alpha_priorP, beta_priorP, sP)/betaTargetDistribution_v2(&x, dataP, data_lenP, alpha_priorP, beta_priorP, sP));
     
     u = gsl_ran_flat(rP,0.0,1.0);
     
