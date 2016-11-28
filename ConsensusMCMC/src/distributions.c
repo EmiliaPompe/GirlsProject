@@ -83,8 +83,8 @@ double normalTargetDistribution(double *restrict xP, double *restrict dataP, int
 
 }
 
-// not tested yet
-double gammaTargetDistribution(double *restrict xP, double *restrict dataP, int *restrict data_lenP, double *restrict k_priorP, double *restrict theta_priorP){
+
+double gammaTargetDistribution(double *restrict xP,  int *restrict dataP, int *restrict data_lenP, double *restrict k_priorP, double *restrict theta_priorP){
 
   double x, k_prior, theta_prior, target_val, k_post, theta_post;
   int data_len;
@@ -101,8 +101,8 @@ double gammaTargetDistribution(double *restrict xP, double *restrict dataP, int 
   k_prior = *k_priorP;
   theta_prior = *theta_priorP;
 
-  k_post = k_prior + sum(dataP, data_len);
-  theta_post = theta_prior/((data_len*theta_prior)+1);
+  k_post = k_prior + (double) sumInt(dataP, data_len);
+  theta_post = theta_prior/(((double) data_len*theta_prior)+1.0);
 
   target_val = gsl_ran_gamma_pdf(x, k_post, theta_post); // we use k and theta instead of a and b
   return(target_val);

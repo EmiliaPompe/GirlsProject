@@ -2,4 +2,5 @@
 #define UTILITIES_H
 double min(double a, double b);
 double sum(double *v, int length_v);
+int sumInt(int *v, int length_v);
 #endif
