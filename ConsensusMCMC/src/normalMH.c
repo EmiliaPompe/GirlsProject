@@ -6,7 +6,7 @@
 #include "utilities.h"
 #include "distributions_v2.h"
 
-void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict k_priorP, double *restrict theta_priorP, int *restrict sP, double *restrict vec_xP)
+void normalMH(double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict vec_xP)
 {
   
   int n, i;
@@ -21,7 +21,7 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   }
   
   acc_count = 0;
-
+  
   n = *nP;
   sigma = *sigmaP;
   x = 4.0;
@@ -29,7 +29,8 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   for (i=1; i<n; i++)
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
-    acc_prob = min(1.0, gammaTargetDistribution_v2(&x_proposed,  dataP,  data_lenP,  k_priorP, theta_priorP, sP)/gammaTargetDistribution_v2(&x,  dataP,  data_lenP,  k_priorP, theta_priorP, sP));
+
+    acc_prob = min(1.0, normalTargetDistribution_v2(&x_proposed,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP)/normalTargetDistribution_v2(&x,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP));
     u = gsl_ran_flat(rP,0.0,1.0);
     if (u < acc_prob)
     {

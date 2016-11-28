@@ -8,7 +8,7 @@
 void BetaMH_v2( int *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
 {
   
-  long n, i;
+  int n, i;
   double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior, denom;
   int acc_count, num_successes, data_len;
   

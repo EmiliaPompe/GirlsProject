@@ -14,7 +14,7 @@ void BetaMH(int *restrict nP, double *restrict sigmaP, double *restrict alpha_pr
     rP = gsl_rng_alloc(gsl_rng_mt19937);
   }
   
-  long n, i;
+  int n, i;
   double sigma, x, x_proposed, u, acc_prob, alpha_post, beta_post, alpha_prior, beta_prior, denom;
   int num_successes = 1, num_failures = 999, acc_count = 0;
   

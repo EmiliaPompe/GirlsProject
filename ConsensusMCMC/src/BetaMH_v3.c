@@ -4,12 +4,12 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utilities.h"
-#include "distributions.h"
+#include "distributions_v2.h"
 
-void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, double *restrict vec_xP)
+void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, int *restrict sP, double *restrict vec_xP)
 {
   
-  long n, i;
+  int n, i;
   double sigma, x, x_proposed, u, acc_prob ;
   int acc_count;
   
@@ -30,7 +30,7 @@ void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma); // random walk MH
     
-    acc_prob = min(1.0, betaTargetDistribution(&x_proposed, dataP, data_lenP, alpha_priorP, beta_priorP)/betaTargetDistribution(&x, dataP, data_lenP, alpha_priorP, beta_priorP));
+    acc_prob = min(1.0, betaTargetDistribution_v2(&x_proposed, dataP, data_lenP, alpha_priorP, beta_priorP, sP)/betaTargetDistribution_v2(&x, dataP, data_lenP, alpha_priorP, beta_priorP, sP));
     
     u = gsl_ran_flat(rP,0.0,1.0);
     
