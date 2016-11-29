@@ -10,7 +10,7 @@ observations <- rbinom(10000, size = 1, prob = 0.5)
 nr_servers <- 4
 shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
 
-n_iter = 10000
+n_iter = 1000000
 burn_in = 0.1*n_iter
 sigma = 0.1
 alpha_prior = 1 
@@ -25,7 +25,7 @@ clust <- makePSOCKcluster(names = c("greywagtail",
 
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
 
-lambda <- clusterApplyLB(clust, shards, BetaMH_v3, n=n_iter, sigma=sigma, alpha_prior=alpha_prior, beta_prior=beta_prior, s = nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, BetaMH, n=n_iter, sigma=sigma, alpha_prior=alpha_prior, beta_prior=beta_prior, s = nr_servers, x_0 = x_0)
 
 stopCluster(clust)
 
@@ -36,7 +36,7 @@ colnames(df) <- paste0('x', seq_len(nr_servers))
 
 parallel_markov_chain = weightsComputation(df, method = "sample variance")
 
-single_markov_chain = BetaMH_v3(observations, n_iter, sigma = sigma, alpha_prior=alpha_prior, beta_prior=beta_prior, s=1, x_0=x_0)
+single_markov_chain = BetaMH(observations, n_iter, sigma = sigma, alpha_prior=alpha_prior, beta_prior=beta_prior, s=1, x_0=x_0)
 
 theoretical_distribution = rbeta(10000, alpha_prior+sum(observations), beta_prior + length(observations)- sum(observations))
 

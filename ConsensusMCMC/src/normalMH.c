@@ -35,15 +35,12 @@ void normalMH(double *restrict dataP, int *restrict data_lenP,  int *restrict nP
   x = *x_0P;
   vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
 
-  printf("%d\n", *data_lenP);
-
   for (i=1; i<n+1; i++)
   {
 
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
     
     prior_ratio = pow(gsl_ran_gaussian_pdf(x_proposed - mean_prior, sigma_prior)/gsl_ran_gaussian_pdf(x - mean_prior, sigma_prior), (1.0/s)) ;
-    //printf("%lf prior ratios\n", prior_ratio);
 
     subtractConst(dataP, *data_lenP, x_proposed, v_result_x_proposed);
     squareVectElementwise(v_result_x_proposed, *data_lenP, v_result2_x_proposed);
@@ -54,25 +51,8 @@ void normalMH(double *restrict dataP, int *restrict data_lenP,  int *restrict nP
     log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
      
-     
-    //can go paralel here, calc marginal liklihoods, then recombine with a product
-    //log_lik_difference = -1.0 * sum(squareVectElementwise(subtractConst(dataP, *data_lenP, x_proposed), *data_lenP), *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
-    // + sum(squareVectElementwise(subtractConst(dataP, *data_lenP, x),*data_lenP), *data_lenP)* (1.0/(2.0*sigma_known*sigma_known));
-
-
-    // for (int i = 0; i < *data_lenP; ++i)
-    // {
-    //   printf("Data: %lf\n", dataP[i]);
-
-    // }
-    
-    // printf("%lf\n", sum(squareVectElementwise(subtractConst(dataP, *data_lenP, x_proposed), *data_lenP), *data_lenP) );
-    // printf("%lf x proposed\n", x_proposed);
-    //printf("%lf log lik diff\n", log_lik_difference);
-
-    //back to series, and calculate acceptance
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
-    //acc_prob = min(1.0, normalTargetDistribution_v2(&x_proposed,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP)/normalTargetDistribution_v2(&x,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP));
+
     u = gsl_ran_flat(rP,0.0,1.0);
     if (u < acc_prob)
     {
