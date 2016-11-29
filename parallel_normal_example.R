@@ -2,9 +2,8 @@ devtools::load_all("ConsensusMCMC")
 library(parallel)
 library(devtools)
 library(ggplot2)
-source("plotting_functions.R")
 
-#set.seed(15)
+set.seed(15)
 
 sigma_known = 1
 observations <- rnorm(10000, 3 , sigma_known)
@@ -13,7 +12,7 @@ shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/
 
 n_iter = 10000
 burn_in = 0.1*n_iter
-sigma = 0.01
+sigma = 0.01  # sigma for the proposal distribution
 mean_prior=0
 sigma_prior=1.0
 x_0 = 0
@@ -32,43 +31,25 @@ stopCluster(clust)
 df = data.frame(lapply(lambda, function(y) y))
 colnames(df) <- paste0('x', seq_len(nr_servers))
 
-#df$mean = rowMeans(df)
 
-machine_sample_variance = apply(df, 2, var)
-machine_precision = 1/machine_sample_variance
+parallel_markov_chain = weightsComputation(df, method = "sample variance")
 
-sum_machine_precision = sum(machine_precision)
+single_markov_chain = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) 
 
-parallel_chain = (as.matrix(df) %*% machine_precision)/sum_machine_precision
 
+theoretical_distribution = rnorm(n_iter,
+                          mean = (mean_prior/sigma_prior^2 + sum(observations)/sigma_known^2)/(1/sigma_prior^2 + length(observations)/sigma_known^2),
+                          sd = sqrt(1/(1/sigma_prior^2 + length(observations)/sigma_known^2)))
+
+
+#################################################################################################################
+## Plot results
+#################################################################################################################
 
 par(mfrow=c(1,1))
-result = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
-markov_chain = result
-mean_post = (mean_prior/sigma_prior^2 + sum(observations)/sigma_known^2)/(1/sigma_prior^2 + length(observations)/sigma_known^2)
-sigma_post = sqrt(1/(1/sigma_prior^2 + length(observations)/sigma_known^2))
+HistPlot(list(single_markov_chain, parallel_markov_chain, theoretical_distribution), 
+              method = c("1 machine", "4 machines", "theoretical posterior distribution"), burn_in = 0.3)
 
-HistPlot(list(markov_chain, rnorm(10000, mean_post, sigma_post)), method = c("markov chain", "theor"), burn_in = 0.3)
+QQPlot(single_markov_chain[burn_in:n_iter], parallel_markov_chain[burn_in:n_iter], line = TRUE)
 
-#HistPlot(list(markov_chain, df$mean, rnorm(1000, mean_post, sigma_post)), method = c("One machine", "4 machines", "theoretical post distribution"), burn_in = 0.3)
-
-HistPlot(list(markov_chain, parallel_chain, rnorm(10000, mean_post, sigma_post)), method = c("One machine", "4 machines", "theoretical post distribution"), burn_in = 0.3)
-
-
-#HistPlot(list(df$x1, df$x2, df$x3, df$x4), method = c("1", "2", "3", "4"))
-#sd(df$mean)
-#sd(markov_chain)
-#d1 = density(markov_chain)
-#d2 = density(df$mean)
-#d3 = density(rnorm(1000, mean_post, sigma_post))
-
-#plot(range(d1$x, d2$x, d3$x), range(d1$y, d2$y, d3$y), type = "n", xlab = "x",
-#     ylab = "Density", xlim=c(0,0.01))
-#lines(d1, col = "red")
-#lines(d2, col = "blue")
-#lines(d3, col = "black")
-
-#plot(density(markov_chain))
-#plot(density(df$mean), col='red')
-
-#qqplot(markov_chain[burn_in:n_iter], df$mean[burn_in:n_iter])
+TracePlot(list(single_markov_chain, parallel_markov_chain), method = c('single machine', '4 machines'),  burn_in=0.3)
