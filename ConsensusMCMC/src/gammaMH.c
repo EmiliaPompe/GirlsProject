@@ -18,6 +18,7 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   if(rP == NULL) {  //set up random numbers generator
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
+    gsl_rng_set (rP, (unsigned long int) *dataP);
   }
   
   acc_count = 0;
