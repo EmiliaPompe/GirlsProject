@@ -30,24 +30,42 @@ int sumInt(int *v, int length_v){
 }
 
 
-double * subtractConst(double *v, int length_v, double constant)
+void subtractConst(double *v, int length_v, double constant, double *v_result)
 {
-  int i;
+  //double v_result[length_v];
   
-  for (i=0; i<length_v; i++){
-    v[i] -= constant;
+  for (int i=0; i<length_v; i++){
+    v_result[i] = v[i] - constant;
   }
-  return(v);
 }
 
-double * squareVectElementwise(double *v, int length_v)
+void squareVectElementwise(double *v, int length_v, double *v_result)
 {
-  int i;
-  
-  for (i=0; i<length_v; i++){
-    v[i] = v[i]*v[i];
+  //double v_result[length_v];
+
+  for (int i=0; i<length_v; i++){
+     v_result[i] = v[i] * v[i];
   }
-  return(v);
+
 }
 
+#include <stdio.h>
 
+int main(void)
+{
+  double vect[6] = {1.0,2.0,4.0,0.6,9.0,5.0};
+  //resultP = sum(squareVectElementwise(subtractConst(vect, 6, 3.0), 6),6);
+  double vresP[6];
+  double vresP2[6];
+
+  subtractConst(vect, 6, 3.0, vresP);
+  squareVectElementwise(vresP, 6, vresP2);
+
+
+  for (int i = 0; i < 6; i++)
+  {
+    printf("%lf\n", vresP2[i]); 
+  }
+  
+  return 0;
+}
