@@ -11,7 +11,7 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   
   int n, i;
   double sigma, x, x_proposed, u, acc_prob, prior_ratio, log_lik_difference, theta_prior, k_prior, s;
-  int acc_count, data, data_len;
+  int acc_count, data_len;
   
   static gsl_rng *restrict rP = NULL;
   
@@ -27,7 +27,6 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   k_prior = *k_priorP;
   theta_prior = *theta_priorP;
   data_len = *data_lenP;
-  data = *dataP;
   s = (double) *sP;
   
   x = 4.0;
@@ -38,7 +37,7 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
     
     prior_ratio = pow((pow(x_proposed, k_prior-1)*exp(-x_proposed/theta_prior))/(pow(x, k_prior-1)*exp(-x/theta_prior)), (1.0/s));
     
-    log_lik_difference = (-data_len*x_proposed) + ((log(x_proposed))*sum(dataP, data_len)) + (data_len*x) - ((log(x))*sum(dataP, data_len));
+    log_lik_difference = (-data_len*x_proposed) + ((log(x_proposed))* ((double) sumInt(dataP, data_len))) + (data_len*x) - ((log(x))*((double)sumInt(dataP, data_len)));
     
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
     
