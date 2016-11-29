@@ -10,7 +10,7 @@
 void NormalMultiCoreMH(double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
   
-  int n, i, num_cores;
+  int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
   double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
@@ -52,17 +52,36 @@ void NormalMultiCoreMH(double *restrict dataP, int *restrict data_lenP,  int *re
     log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
       + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
     
-    //split the data
-    num_cores = 8;
-    omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
-    //printf("%d\n", omp_get_max_threads( ));   // To check what's available
+    // //split the data
+    // num_cores = 8;
+    // omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
+    // //printf("%d\n", omp_get_max_threads( ));   // To check what's available
     
-    #pragma omp parallel 
-      {
-        printf("Core index: %i\n", omp_get_thread_num());
+    
+    // remainder = *data_lenP % num_cores; // the amount of data remaining if split data equally across cores
+    // k = (*data_lenP - remainder) / num_cores; // how much data on each core (the last will take remainder)
 
 
-      }
+    // #pragma omp parallel 
+    //   {
+    //     int thread_data_len;
+    //     double *thread_dataP;
+    //     int thread_num = omp_get_thread_num();
+    //     thread_dataP = dataP + thread_num*k;
+
+    //     if (thread_num == num_cores)
+    //     {
+    //       thread_data_len = k+remainder; //put the extra data on the last thread
+    //     } else {
+    //       thread_data_len = k;
+    //     }
+
+
+
+    //     printf("Core index: %i\n", thread_num);
+
+
+    //   }
     
       
     //can go paralel here, calc marginal liklihoods, then recombine with a product
