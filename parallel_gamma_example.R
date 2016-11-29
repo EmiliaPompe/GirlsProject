@@ -9,7 +9,7 @@ observations <- rpois(10000, 4)
 nr_servers <- 4
 shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
 
-n_iter = 1000
+n_iter = 100000
 burn_in = 0.1*n_iter
 sigma = 0.01  # sigma for the proposal distribution
 k_prior=1

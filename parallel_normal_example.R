@@ -36,7 +36,6 @@ parallel_markov_chain = weightsComputation(df, method = "sample variance")
 
 single_markov_chain = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) 
 
-
 theoretical_distribution = rnorm(n_iter,
                           mean = (mean_prior/sigma_prior^2 + sum(observations)/sigma_known^2)/(1/sigma_prior^2 + length(observations)/sigma_known^2),
                           sd = sqrt(1/(1/sigma_prior^2 + length(observations)/sigma_known^2)))
