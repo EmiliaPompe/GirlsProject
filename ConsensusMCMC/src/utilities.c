@@ -49,23 +49,24 @@ void squareVectElementwise(double *v, int length_v, double *v_result)
 
 }
 
-#include <stdio.h>
-
-int main(void)
-{
-  double vect[6] = {1.0,2.0,4.0,0.6,9.0,5.0};
-  //resultP = sum(squareVectElementwise(subtractConst(vect, 6, 3.0), 6),6);
-  double vresP[6];
-  double vresP2[6];
-
-  subtractConst(vect, 6, 3.0, vresP);
-  squareVectElementwise(vresP, 6, vresP2);
-
-
-  for (int i = 0; i < 6; i++)
-  {
-    printf("%lf\n", vresP2[i]); 
-  }
-  
-  return 0;
-}
+//#include <stdio.h>
+//
+//int main(void)
+//{
+//  double vect[6] = {1.0,2.0,4.0,0.6,9.0,5.0};
+//  //resultP = sum(squareVectElementwise(subtractConst(vect, 6, 3.0), 6),6);
+//  double vresP[6];
+//  double vresP2[6];
+//
+//  subtractConst(vect, 6, 3.0, vresP);
+// squareVectElementwise(vresP, 6, vresP2);
+//
+//
+//
+//  for (int i = 0; i < 6; i++)
+//  {
+//    printf("%lf\n", vresP2[i]); 
+//  }
+//  
+//  return 0;
+//}

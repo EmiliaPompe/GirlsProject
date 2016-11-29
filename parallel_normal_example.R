@@ -1,12 +1,12 @@
 library(parallel)
 source("plotting_functions.R")
 
-sigma_known = 1.0
-observations <- rnorm(2, 0 , sigma_known)
+sigma_known = 0.5
+observations <- rnorm(10000, 0 , sigma_known)
 nr_servers <- 4
 shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
 
-n_iter = 2
+n_iter = 10000
 burn_in = 0.1*n_iter
 sigma = 0.01
 
@@ -27,8 +27,9 @@ colnames(df) <- paste0('x', seq_len(nr_servers))
 df$mean = rowMeans(df)
 
 par(mfrow=c(1,1))
-result = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=1/nr_servers, sigma_prior=1/nr_servers, sigma_known=sigma_known, s=1) #are these args right TODO
+result = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=1/nr_servers, sigma_prior=1/nr_servers, sigma_known=sigma_known, s=1, x_0 = 1) #are these args right TODO
 markov_chain = result
+HistPlot(list(markov_chain))
 
 d1 = density(markov_chain)
 d2 = density(df$mean)
