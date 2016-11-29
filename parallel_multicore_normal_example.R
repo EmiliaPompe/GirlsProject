@@ -13,7 +13,7 @@ sigma_known = 1
 nr_observations = 3
 observations <- rnorm(2, nr_observations , sigma_known)
 
-n_iter = 10
+n_iter = 4
 burn_in = 0.1*n_iter
 sigma = 0.01
 mean_prior=0
