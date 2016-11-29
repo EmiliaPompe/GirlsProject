@@ -1,23 +1,27 @@
 library(parallel)
 source("plotting_functions.R")
 
-#observations <- c(1, rep(0, times=999))
-observations <- rbinom(10000, size = 1, prob = 0.5)
-nr_servers <- 4
+observations <- c(1, rep(0, times=999))
+#observations <- rbinom(10000, size = 1, prob = 0.5)
+nr_servers <- 100
 shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
 
-n_iter = 100000
+n_iter = 10000
 burn_in = 0.1*n_iter
 sigma = 0.1
+alpha_prior = 1 
+beta_prior = 1
+x_0 = 0.01
 
-clust <- makePSOCKcluster(names = c("greywagtail",
+
+clust <- makePSOCKcluster(names = rep(c("greywagtail",
                                     "greyheron",
                                     "greypartridge",
-                                    "greyplover"))
+                                    "greyplover"), 25))
 
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
 
-lambda <- clusterApplyLB(clust, shards, BetaMH_v3, n=n_iter, sigma=sigma, alpha_prior=1/nr_servers, beta_prior=1/nr_servers)
+lambda <- clusterApplyLB(clust, shards, BetaMH_v3, n=n_iter, sigma=sigma, alpha_prior=alpha_prior/nr_servers, beta_prior=beta_prior/nr_servers, s = nr_servers, x_0 = x_0)
 
 stopCluster(clust)
 
@@ -27,7 +31,7 @@ colnames(df) <- paste0('x', seq_len(nr_servers))
 df$mean = rowMeans(df)
 
 par(mfrow=c(1,1))
-result = BetaMH_v3(observations, n_iter, sigma = sigma, alpha_prior=1, beta_prior=1, s=1, x_0=0.1)
+result = BetaMH_v3(observations, n_iter, sigma = sigma, alpha_prior=alpha_prior, beta_prior=beta_prior, s=1, x_0=x_0)
 HistPlot(list(result, rbeta(100000, 1+sum(observations), 1+length(observations)- sum(observations))),method = c('result', 'theoretical'))
 markov_chain = result$x
 
