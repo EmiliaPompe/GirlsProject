@@ -49,7 +49,7 @@ df$mean = rowMeans(df)
 #  Run on a single machine
 ############################################################################
 
-result = normalMultiCoreMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
+result = NormalMultiCoreMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
 
 ############################################################################
 #  Plot and compare to theory
