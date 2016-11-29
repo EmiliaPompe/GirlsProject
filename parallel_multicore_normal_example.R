@@ -1,4 +1,5 @@
 devtools::load_all("ConsensusMCMC")
+
 library(parallel)
 library(devtools)
 library(ggplot2)
@@ -9,9 +10,10 @@ source("plotting_functions.R")
 ############################################################################
 
 sigma_known = 1
-observations <- rnorm(10000, 3 , sigma_known)
+nr_observations = 3
+observations <- rnorm(2, nr_observations , sigma_known)
 
-n_iter = 10000
+n_iter = 10
 burn_in = 0.1*n_iter
 sigma = 0.01
 mean_prior=0
@@ -47,7 +49,7 @@ df$mean = rowMeans(df)
 #  Run on a single machine
 ############################################################################
 
-result = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
+result = normalMultiCoreMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
 
 ############################################################################
 #  Plot and compare to theory
