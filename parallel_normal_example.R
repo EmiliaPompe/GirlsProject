@@ -4,6 +4,8 @@ library(devtools)
 library(ggplot2)
 source("plotting_functions.R")
 
+#set.seed(15)
+
 sigma_known = 1
 observations <- rnorm(10000, 3 , sigma_known)
 nr_servers <- 4
@@ -40,23 +42,22 @@ sum_machine_precision = sum(machine_precision)
 parallel_chain = (as.matrix(df) %*% machine_precision)/sum_machine_precision
 
 
-
 par(mfrow=c(1,1))
 result = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
 markov_chain = result
 mean_post = (mean_prior/sigma_prior^2 + sum(observations)/sigma_known^2)/(1/sigma_prior^2 + length(observations)/sigma_known^2)
 sigma_post = sqrt(1/(1/sigma_prior^2 + length(observations)/sigma_known^2))
 
-HistPlot(list(markov_chain, rnorm(1000, mean_post, sigma_post)), method = c("markov chain", "theor"), burn_in = 0.3)
+HistPlot(list(markov_chain, rnorm(10000, mean_post, sigma_post)), method = c("markov chain", "theor"), burn_in = 0.3)
 
 #HistPlot(list(markov_chain, df$mean, rnorm(1000, mean_post, sigma_post)), method = c("One machine", "4 machines", "theoretical post distribution"), burn_in = 0.3)
 
-HistPlot(list(markov_chain, parallel_chain, rnorm(1000, mean_post, sigma_post)), method = c("One machine", "4 machines", "theoretical post distribution"), burn_in = 0.3)
+HistPlot(list(markov_chain, parallel_chain, rnorm(10000, mean_post, sigma_post)), method = c("One machine", "4 machines", "theoretical post distribution"), burn_in = 0.3)
 
 
-\HistPlot(list(df$x1, df$x2, df$x3, df$x4), method = c("1", "2", "3", "4"))
-sd(df$mean)
-sd(markov_chain)
+#HistPlot(list(df$x1, df$x2, df$x3, df$x4), method = c("1", "2", "3", "4"))
+#sd(df$mean)
+#sd(markov_chain)
 #d1 = density(markov_chain)
 #d2 = density(df$mean)
 #d3 = density(rnorm(1000, mean_post, sigma_post))
@@ -70,4 +71,4 @@ sd(markov_chain)
 #plot(density(markov_chain))
 #plot(density(df$mean), col='red')
 
-qqplot(markov_chain[burn_in:n_iter], df$mean[burn_in:n_iter])
+#qqplot(markov_chain[burn_in:n_iter], df$mean[burn_in:n_iter])
