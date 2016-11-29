@@ -8,4 +8,5 @@ Maintainer: Tamar Loach <tamar.loach@spc.ox.ac.uk>
 Description: Package to perform consensus MCMC for some example models.
 License: GPL-2
 NeedsCompilation: yes
-Packaged:
+Packaged: 
+RoxygenNote: 5.0.1
