@@ -6,7 +6,7 @@
 #include "utilities.h"
 #include "distributions_v2.h"
 
-void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, int *restrict sP, double *restrict vec_xP)
+void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
   
   int n, i;
@@ -36,7 +36,7 @@ void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP
   data = *dataP;
   s = (double) *sP;
   
-  x = 0.1;
+  x = *x_0P;
   vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
   for (i=1; i<n; i++)
   {
