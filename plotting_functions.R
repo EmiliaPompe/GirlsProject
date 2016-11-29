@@ -16,8 +16,8 @@ QQPlot <- function(chain1, chain2, line = TRUE, size_point = 2, size_line =1, ..
 }
 
 # example for QQPlot
-p <- QQPlot(chain1=rnorm(100), chain2=rnorm(100))
-p 
+#p <- QQPlot(chain1=rnorm(100), chain2=rnorm(100))
+#p 
 
 
 TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0.1, size_line = 1, ...){
@@ -47,7 +47,7 @@ TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0.1, size_line =
     
     p <- ggplot(df, aes(x=iteration, y=chain, col = method)) + geom_line(size = size_line) + l
   }
-  p
+  #p
 }
 
 # example
@@ -77,7 +77,7 @@ HistPlot <- function(list_of_vectors, method = NULL, burn_in =0.1, size_line = 1
     
     p <- ggplot(df, aes(x = chain, col = method)) + geom_density(size = size_line) +  l
   }
-  p
+  #p
 }
   
 
@@ -100,5 +100,5 @@ ACFPlot <- function(chain, lag.max = 10, ...){
   p
 }
 
-p <- ACFPlot(chain=rnorm(1000), 10, ggtitle('acf'))
-suppressWarnings(print(p))
+#p <- ACFPlot(chain=rnorm(1000), 10, ggtitle('acf'))
+#suppressWarnings(print(p))
