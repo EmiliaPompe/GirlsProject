@@ -6,7 +6,7 @@
 #include "utilities.h"
 #include "distributions_v2.h"
 
-void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict k_priorP, double *restrict theta_priorP, int *restrict sP, double *restrict vec_xP)
+void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict k_priorP, double *restrict theta_priorP, int *restrict sP, int *restrict x_0P, double *restrict vec_xP)
 {
   
   int n, i;
@@ -26,22 +26,26 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   sigma = *sigmaP;
   k_prior = *k_priorP;
   theta_prior = *theta_priorP;
-  data_len = *data_lenP;
+  data_len = (double) *data_lenP;
   s = (double) *sP;
+  x = *x_0P;
   
-  x = 4.0;
   vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
-  for (i=1; i<n; i++)
+  for (i=1; i<n+1; i++)
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
     
+    if(x_proposed <=0){
+      acc_prob=0;
+    } else {
     prior_ratio = pow((pow(x_proposed, k_prior-1)*exp(-x_proposed/theta_prior))/(pow(x, k_prior-1)*exp(-x/theta_prior)), (1.0/s));
     
     log_lik_difference = (-data_len*x_proposed) + ((log(x_proposed))* ((double) sumInt(dataP, data_len))) + (data_len*x) - ((log(x))*((double)sumInt(dataP, data_len)));
     
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
-    
+    }
     //acc_prob = min(1.0, gammaTargetDistribution_v2(&x_proposed,  dataP,  data_lenP,  k_priorP, theta_priorP, sP)/gammaTargetDistribution_v2(&x,  dataP,  data_lenP,  k_priorP, theta_priorP, sP));
+    
     u = gsl_ran_flat(rP,0.0,1.0);
     if (u < acc_prob)
     {

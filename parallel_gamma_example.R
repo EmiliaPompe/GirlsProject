@@ -30,7 +30,9 @@ colnames(df) <- paste0('x', seq_len(nr_servers))
 df$mean = rowMeans(df)
 
 par(mfrow=c(1,1))
-markov_chain = GammaMH(observations, n_iter, sigma = sigma, k_prior=1, theta_prior=4, s=1) 
+markov_chain = GammaMH(observations, n_iter, sigma = sigma, k_prior=1, theta_prior=4, s=1, x_0 = 4 ) 
+HistPlot(list(markov_chain, rgamma(10000, shape = 1+sum(observations), scale = 4/(4*length(observations)+1))), method = c("One machine", "theoretical"), burn_in = 0.1)
+
 
 HistPlot(list(markov_chain, df$mean), method = c("One machine", "4 machines"), burn_in = 0.1)
 
