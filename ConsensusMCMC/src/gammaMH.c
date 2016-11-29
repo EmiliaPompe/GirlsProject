@@ -27,7 +27,7 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   k_prior = *k_priorP;
   theta_prior = *theta_priorP;
   data_len = *data_lenP;
-  data = *dataP
+  data = *dataP;
   s = (double) *sP;
   
   x = 4.0;
@@ -36,9 +36,9 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
     
-    prior_ratio = pow((pow(x_proposed, k_prior-1)*exp(-x_proposed/theta_prior))/(pow(x, k_prior-1)*exp(-x/theta_prior)), (1.0/s))
+    prior_ratio = pow((pow(x_proposed, k_prior-1)*exp(-x_proposed/theta_prior))/(pow(x, k_prior-1)*exp(-x/theta_prior)), (1.0/s));
     
-    log_lik_difference = (-data_len*x_proposed) + ((log(x_proposed))*sum(data)) + (data_len*x) - ((log(x))*sum(data))
+    log_lik_difference = (-data_len*x_proposed) + ((log(x_proposed))*sum(dataP, data_len)) + (data_len*x) - ((log(x))*sum(dataP, data_len));
     
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
     

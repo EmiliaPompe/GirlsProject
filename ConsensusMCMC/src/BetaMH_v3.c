@@ -42,9 +42,9 @@ void BetaMH_v3(double *restrict dataP, int *restrict data_lenP, int *restrict nP
   {
     x_proposed = x + gsl_ran_gaussian(rP, sigma); // random walk MH
     
-    prior_ratio = pow((pow(x_proposed, alpha_prior-1)*pow(1-x_proposed, beta_prior-1)/pow(x, alpha_prior-1)*pow(1-x, beta_prior-1)), (1.0/s) )
+    prior_ratio = pow((pow(x_proposed, alpha_prior-1)*pow(1-x_proposed, beta_prior-1)/pow(x, alpha_prior-1)*pow(1-x, beta_prior-1)), (1.0/s) );
     
-    log_lik_difference = num_successes*(log(x_proposed)) + (data_len-num_successes)*log(1-x_proposed) - num_successes*(log(x)) + (data_len-num_successes)*log(1-x)
+    log_lik_difference = num_successes*(log(x_proposed)) + (data_len-num_successes)*log(1-x_proposed) - num_successes*(log(x)) + (data_len-num_successes)*log(1-x);
       
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
     
