@@ -5,15 +5,18 @@
 #include <gsl/gsl_randist.h>
 #include <omp.h>
 #include <stdbool.h>
-#include <time.h>
+#include <sys/time.h>
 #include "utilities.h"
 #include "distributions_v2.h"
 
 
-void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
+void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
 
+<<<<<<< HEAD
   bool multicore = *multicoreP;
+=======
+>>>>>>> 743f1ad498d48f1022bea4fbc4603b177b351c09
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
@@ -21,12 +24,18 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
+<<<<<<< HEAD
   	time_t epoch_time;
     epoch_time = time( NULL );
+=======
+  	struct timeval tv;
+  	gettimeofday(&tv,NULL);
+
+>>>>>>> 743f1ad498d48f1022bea4fbc4603b177b351c09
     //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
-    gsl_rng_set (rP, (unsigned long int) epoch_time);
+    gsl_rng_set (rP, (unsigned long int) 1000000*tv.tv_sec+tv.tv_usec);
   }
   
   acc_count = 0;
@@ -46,22 +55,8 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
     prior_ratio = pow(gsl_ran_gaussian_pdf(x_proposed - mean_prior, sigma_prior)/gsl_ran_gaussian_pdf(x - mean_prior, sigma_prior), (1.0/s)) ;
     
-    if (multicore == false)
-    {
-    	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
-  		double v_result_x[*data_lenP], v_result2_x[*data_lenP];
-
-    	subtractConst(dataP, *data_lenP, x_proposed, v_result_x_proposed);
-	    squareVectElementwise(v_result_x_proposed, *data_lenP, v_result2_x_proposed);
-	    
-	    subtractConst(dataP, *data_lenP, x, v_result_x);
-	    squareVectElementwise(v_result_x, *data_lenP, v_result2_x);
-	    
-	    log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
-	      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
-    }
   
-    if (multicore == true)
+    if (*multicoreP == 1)
      {	
      	//split the data
 
@@ -110,9 +105,23 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
      	log_lik_difference = thread_log_lik_diff;
      }
 
-     else{
-     	printf("Multicore argument must be true or false\n");
+     else if (*multicoreP == 0)
+     {
+     	//printf("Not doing multicore\n");
+     	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
+  		double v_result_x[*data_lenP], v_result2_x[*data_lenP];
+
+    	subtractConst(dataP, *data_lenP, x_proposed, v_result_x_proposed);
+	    squareVectElementwise(v_result_x_proposed, *data_lenP, v_result2_x_proposed);
+	    
+	    subtractConst(dataP, *data_lenP, x, v_result_x);
+	    squareVectElementwise(v_result_x, *data_lenP, v_result2_x);
+	    
+	    log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
+	      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
      }
+     
+     else printf("multicore must be 1 for true and 0 for false\n");
 
     //back to series, and calculate acceptance
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
@@ -126,5 +135,5 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
     vec_xP[i] = x;
   }
   
-  printf("Acceptance rate: %lf\n", (float) (acc_count)/n);
+  //printf("Acceptance rate: %lf\n", (float) (acc_count)/n);
 }
