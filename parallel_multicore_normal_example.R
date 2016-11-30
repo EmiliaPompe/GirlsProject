@@ -1,8 +1,6 @@
 library(devtools)
 devtools::load_all("ConsensusMCMC")
 
-
-
 time_start = Sys.time()
 
 ############################################################################
