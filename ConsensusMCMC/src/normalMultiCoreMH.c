@@ -53,35 +53,54 @@ void NormalMultiCoreMH(double *restrict dataP, int *restrict data_lenP,  int *re
       + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
     
     // //split the data
-    // num_cores = 8;
-    // omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
-    // //printf("%d\n", omp_get_max_threads( ));   // To check what's available
+    num_cores = 8;
+    omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
+    //printf("%d\n", omp_get_max_threads( ));   // To check what's available
     
     
-    // remainder = *data_lenP % num_cores; // the amount of data remaining if split data equally across cores
-    // k = (*data_lenP - remainder) / num_cores; // how much data on each core (the last will take remainder)
+    remainder = *data_lenP % num_cores; // the amount of data remaining if split data equally across cores
+    k = (*data_lenP - remainder) / num_cores; // how much data on each core (the last will take remainder)
+    printf("Remainder %i\n", remainder);
 
+    #pragma omp parallel 
+      {
+        int thread_data_len;
+        double *thread_dataP, thread_log_lik_difference;
+        int thread_num = omp_get_thread_num();
+        thread_dataP = dataP + thread_num*k;
 
-    // #pragma omp parallel 
-    //   {
-    //     int thread_data_len;
-    //     double *thread_dataP;
-    //     int thread_num = omp_get_thread_num();
-    //     thread_dataP = dataP + thread_num*k;
+        // Initialise arrays to store liklihood calc intermediary results
+        double thread_result1[thread_data_len], thread_result2[thread_data_len];
+        double thread_result3[thread_data_len], thread_result4[thread_data_len];
 
-    //     if (thread_num == num_cores)
-    //     {
-    //       thread_data_len = k+remainder; //put the extra data on the last thread
-    //     } else {
-    //       thread_data_len = k;
-    //     }
+        if (thread_num == num_cores-1)
+        {
+          printf("Here");
+          thread_data_len = k+remainder; //put the extra data on the last thread
+        } else {
+          thread_data_len = k;
+        }
 
+        subtractConst(thread_dataP, thread_data_len, x_proposed, thread_result1);
+        squareVectElementwise(thread_result1, thread_data_len, thread_result2);
 
+        subtractConst(thread_dataP, thread_data_len, x, thread_result3);
+        squareVectElementwise(thread_result3, thread_data_len, thread_result4);
+        
+        thread_log_lik_difference = (-1.0) * sum(thread_result2, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
+        + sum(thread_result4, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
 
-    //     printf("Core index: %i\n", thread_num);
+       // printf("Core index: %i thread_data_len: %i Log lik diff: %lf\n", thread_num, thread_data_len, thread_log_lik_difference);
 
+        if (thread_num == 7){
+          for (int i = 0; i < thread_data_len; i++)
+            {
+              printf("%lf\n", thread_dataP[i]);
+            }
+        }
+       
 
-    //   }
+      }
     
       
     //can go paralel here, calc marginal liklihoods, then recombine with a product

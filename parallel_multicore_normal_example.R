@@ -1,21 +1,19 @@
-devtools::load_all("ConsensusMCMC")
-
 library(parallel)
 library(devtools)
 library(ggplot2)
-source("plotting_functions.R")
+devtools::load_all("ConsensusMCMC")
 
 ############################################################################
 #  Generate data and specify params
 ############################################################################
 
 sigma_known = 1
-nr_observations = 3
-observations <- rnorm(2, nr_observations , sigma_known)
+nr_observations = 20
+observations <- rnorm(nr_observations, 0.0, sigma_known)
 
-n_iter = 4
+n_iter = 1
 burn_in = 0.1*n_iter
-sigma = 0.01
+sigma = 0.9
 mean_prior=0
 sigma_prior=1.0
 x_0 = 0
