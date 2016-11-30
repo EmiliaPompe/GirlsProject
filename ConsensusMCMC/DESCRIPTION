@@ -10,3 +10,4 @@ License: GPL-2
 NeedsCompilation: yes
 Packaged: 
 RoxygenNote: 5.0.1
+Depends: ggplot2, parallel

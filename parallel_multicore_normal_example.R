@@ -1,8 +1,7 @@
-library(parallel)
 library(devtools)
-library(ggplot2)
-
 devtools::load_all("ConsensusMCMC")
+
+
 
 time_start = Sys.time()
 
