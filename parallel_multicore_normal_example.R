@@ -11,10 +11,10 @@ time_start = Sys.time()
 ############################################################################
 
 sigma_known = 1.0
-nr_observations = 100000
+nr_observations = 10000
 observations <- rnorm(nr_observations, 0.0, sigma_known)
 
-n_iter = 100000
+n_iter = 10000
 burn_in = 0.5
 sigma = 0.1
 mean_prior=0.0
