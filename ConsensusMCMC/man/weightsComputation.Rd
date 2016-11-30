@@ -7,7 +7,7 @@
 weightsComputation(df, method)
 }
 \arguments{
-\item{x}{A number}
+\item{df}{A dataframe derived from running \code{\link{BetaMH}}}
 
 \item{y}{A number}
 }

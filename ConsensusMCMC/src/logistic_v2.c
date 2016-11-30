@@ -6,7 +6,7 @@
 #include <cblas.h>
 #include "utilities.h"
 
-void LogisticMH(double *restrict dataP, double *restrict zP, int *restrict data_lenP, int *restrict ncolP, int *restrict n_iterP, double *restrict sigmaP, double *restrict sigma_priorP, double *restrict mean_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
+void LogisticMH(int *restrict dataP, double *restrict zP, int *restrict data_lenP, int *restrict ncolP, int *restrict n_iterP, double *restrict sigmaP, double *restrict sigma_priorP, double *restrict mean_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
   // They will be arguments of the function in the future (or rather pointers to them)
   //int data_len =5;
@@ -70,6 +70,7 @@ void LogisticMH(double *restrict dataP, double *restrict zP, int *restrict data_
        //subract the mean and divide by sigma prior
        subVectElementwise(x_proposed, mean_priorP, ncol, result_subtract_x_proposed);
        subVectElementwise(x, mean_priorP, ncol, result_subtract_x);
+       
        divideVectElementwise(result_subtract_x_proposed, sigma_priorP, ncol, result_divide_x_proposed);
        divideVectElementwise(result_subtract_x, sigma_priorP, ncol, result_divide_x);
        

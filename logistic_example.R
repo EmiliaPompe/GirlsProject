@@ -48,17 +48,17 @@ y = c(rep(1, times=266),
          rep(1,2),
          rep(1,3), 
          rep(0,1))
-sigma = c(0.1, 0.1, 0.1, 0.1, 0.1) #covariance matrix for the proposal distribution. Need to be of dimension ncol
-sigma_prior = c(0.1,0.1,0.1,0.1,0.1)         #covariance prior for beta coefficients dimension nrow(z)
+sigma = c(0.3, 0.1, 0.1, 0.1, 0.1) #covariance matrix for the proposal distribution. Need to be of dimension ncol
+sigma_prior = c(10,10,10,10,10)         #covariance prior for beta coefficients dimension nrow(z)
 mean_prior = c(-2, 0.5, 0, 0.5, 2) #mean prior for beta coefficients dimension nrow(z)
 x_0 = c(-3.5,1.7,-0.2,0.5,3.5)                 #initial values for the parameters of interest (beta)
 s = 1                              #number of servers
 n_iter = 10000
-burn_in = 0.5
+burn_in = 0
 
 #v = LogisticMH()
 #chain = matrix(v, nrow=11, ncol=2, byrow=TRUE)
-chain = LogisticMH(data, z, n_iter=n_iter, sigma=sigma, sigma_prior=sigma_prior, mean_prior=mean_prior, s=s, x_0=x_0)
+chain = LogisticMH(y, z, n_iter=n_iter, sigma=sigma, sigma_prior=sigma_prior, mean_prior=mean_prior, s=s, x_0=x_0)
 chain_matrix <- matrix(chain, ncol=ncol(z), byrow=TRUE)
 
 #z_data <- as.data.frame(z)
@@ -71,7 +71,7 @@ chain_matrix <- matrix(chain, ncol=ncol(z), byrow=TRUE)
 #################################################################################################################
 
 
-TracePlot(list(chain_matrix[,1]), method = NULL, burn_in = burn_in)
-  
+TracePlot(list(chain_matrix[,2]), method = NULL, burn_in = 0.1)
+HistPlot(list(chain_matrix[,2]))
   
   

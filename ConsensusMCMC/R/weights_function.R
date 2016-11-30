@@ -3,9 +3,9 @@
 #' 
 #' \code{} The function computes the weights used for the Consensus MCMC algorithm. 
 #' The computed weights are used to aggregate the Markov Chains obtained parallelizing the data on different machines. 
-#' @param x A number
-#' @param y A number
-#' @return The sum of \code{x} and \code{y}
+#' @param df A dataframe derived from running \code{\link{BetaMH}} or \code{\link{NormalMH}} or \code{\link{GammaMH}} on the relative data. 
+#' @param method The method that needs to be used to aggregate the markov chains obtained from different machines. Need to be used when running in parallel. 
+#' @return The functions returns an aggregated markov chain
 #' @examples
 #' add(1, 1)
 #' add(10, 1)

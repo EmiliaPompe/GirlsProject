@@ -13,9 +13,6 @@
 void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
 
-
-
-
   bool multicore = *multicoreP;
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
@@ -26,7 +23,7 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   if(rP == NULL) {  //set up random numbers generator
   	time_t epoch_time;
     epoch_time = time( NULL );
-    printf("%i\n", epoch_time);
+    //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
     gsl_rng_set (rP, (unsigned long int) epoch_time);
