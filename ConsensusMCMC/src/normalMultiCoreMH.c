@@ -5,11 +5,17 @@
 #include <gsl/gsl_randist.h>
 #include <omp.h>
 #include <stdbool.h>
+#include <time.h>
 #include "utilities.h"
 #include "distributions_v2.h"
 
+
 void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
+
+
+
+
   bool multicore = *multicoreP;
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
@@ -18,9 +24,12 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
+  	time_t epoch_time;
+    epoch_time = time( NULL );
+    printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
-    gsl_rng_set (rP, (unsigned long int) *dataP);
+    gsl_rng_set (rP, (unsigned long int) epoch_time);
   }
   
   acc_count = 0;
@@ -38,7 +47,6 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   {
     
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
-    
     prior_ratio = pow(gsl_ran_gaussian_pdf(x_proposed - mean_prior, sigma_prior)/gsl_ran_gaussian_pdf(x - mean_prior, sigma_prior), (1.0/s)) ;
     
     if (multicore == false)
@@ -61,7 +69,7 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
      	//split the data
 
      	//printf("%d\n", omp_get_max_threads( ));   // To check what's available
-	    num_cores = 8;
+	    num_cores = 4;
 	    omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
 	    
 	    remainder = *data_lenP % num_cores; // the amount of data remaining if split data equally across cores
@@ -97,24 +105,8 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
 	        subtractConst(thread_dataP, thread_data_len, x, thread_result3);
 	        squareVectElementwise(thread_result3, thread_data_len, thread_result4);
 
-	   		// if (thread_num == 1)
-	     //    {	
-	     //    	printf("x is %lf\n", x);
-	     //    	for (int i = 0; i < thread_data_len; i++)
-	     //        {
-	     //          printf("Data: %lf, Res2: %lf, Res4: %lf\n", thread_dataP[i], thread_result2[i], thread_result4[i]);
-	     //        }
-	     //    }
-	        
 	        thread_log_lik_diff = (-1.0) * sum(thread_result2, thread_data_len) * (1.0/(2.0*sigma_known*sigma_known)) 
 	        + sum(thread_result4, thread_data_len) * (1.0/(2.0*sigma_known*sigma_known));
-
-	        // printf("Core: %i, log lik diff: %lf\n", thread_num, thread_log_lik_diff);
-	        
-	        // if (thread_num == 1){
-	        //   printf("Core index: %i thread_data_len: %i Log lik diff: %lf\n", thread_num, thread_data_len, thread_log_lik_difference);
-
-	        // }
 	      }
 
      	//If want to use multi cores, use thread version as log lik diff
