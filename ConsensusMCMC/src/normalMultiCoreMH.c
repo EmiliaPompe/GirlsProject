@@ -10,11 +10,9 @@
 #include "distributions_v2.h"
 
 
-void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
+void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
 
-  bool multicore = *multicoreP;
-  //multicore = false;
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
@@ -49,7 +47,7 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
     prior_ratio = pow(gsl_ran_gaussian_pdf(x_proposed - mean_prior, sigma_prior)/gsl_ran_gaussian_pdf(x - mean_prior, sigma_prior), (1.0/s)) ;
     
   
-    if (multicore == true)
+    if (*multicoreP == 1)
      {	
      	//split the data
 
@@ -98,7 +96,8 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
      	log_lik_difference = thread_log_lik_diff;
      }
 
-     else{
+     else if(*multicoreP == 0)
+     {
      	//printf("Not doing multicore\n");
      	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
   		double v_result_x[*data_lenP], v_result2_x[*data_lenP];
@@ -112,6 +111,8 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
 	    log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
 	      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
      }
+     
+     else printf("multicore must be 1 for true and 0 for false\n");
 
     //back to series, and calculate acceptance
     acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
