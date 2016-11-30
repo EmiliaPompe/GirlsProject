@@ -10,7 +10,7 @@ sigma_known = 1.0
 nr_observations = 10000
 observations <- rnorm(nr_observations, 3, sigma_known)
 
-n_iter = 1000000
+n_iter = 100000
 burn_in = 0.3
 sigma = 0.01
 mean_prior=0.0
@@ -31,7 +31,7 @@ clust <- makePSOCKcluster(names = c("greywagtail",
 
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
 
-lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=TRUE,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
 
 stopCluster(clust)
 
@@ -51,14 +51,14 @@ shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/
 
 clust <- makePSOCKcluster(names = c("greywagtail"))
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
-lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=TRUE, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
 stopCluster(clust)
 
 df = data.frame(lapply(lambda, function(y) y))
 colnames(df) <- paste0('x', seq_len(nr_servers))
 single_chain = df$x
 
-#single_chain = NormalMultiCoreMH(multicore=TRUE, data=observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
+#single_chain = NormalMultiCoreMH(multicore=1, data=observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=1, x_0 = x_0) #are these args right TODO
 
 ############################################################################
 #  Plot and compare to theory
@@ -91,7 +91,7 @@ for (nr_servers in 1:4) {
   
   clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
   
-  lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=TRUE,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+  lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
   
   stopCluster(clust)
   
