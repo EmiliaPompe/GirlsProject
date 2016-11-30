@@ -5,10 +5,12 @@
 #' The computed weights are used to aggregate the Markov Chains obtained parallelizing the data on different machines. 
 #' @param df A dataframe derived from running \code{\link{BetaMH}} or \code{\link{NormalMH}} or \code{\link{GammaMH}} on the relative data. 
 #' @param method The method that needs to be used to aggregate the markov chains obtained from different machines. Need to be used when running in parallel. 
-#' @return The functions returns an aggregated markov chain
+#' @return The functions returns the aggregated Markov chain from the Consensus MCMC.  
 #' @examples
-#' add(1, 1)
-#' add(10, 1)
+#' 
+#' df = data.frame(lapply(lambda, function(y) y))
+#' parallel_markov_chain = weightsComputation(df, method = "sample variance")
+#' 
 
 ### function to compute weights to aggregate parallel MCMC (constant weights or sample variance) 
 

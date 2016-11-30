@@ -76,31 +76,57 @@ cat(Sys.time() - time_start)
 ############################################################################
 #  Compare different number of computers
 ############################################################################
-
-names <- c("greywagtail",
-          "greyheron",
-          "greypartridge",
-          "greyplover")
-
-for (nr_servers in rep(1:4,5)) {
-  time_start = Sys.time()
-  server_sample <- sample(names, nr_servers, replace=FALSE)
-  shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
-  
-  clust <- makePSOCKcluster(names = server_sample)
-  
-  clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
-  
-  lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
-  
-  stopCluster(clust)
-  
-  df = data.frame(lapply(lambda, function(y) y))
-  colnames(df) <- paste0('x', seq_len(nr_servers))
-  
-  #  Combine results
-  #df$mean = rowMeans(df)
-  parallel_chain = weightsComputation(df, method="constant")
-  print(nr_servers)
-  print(Sys.time() - time_start)
-}
+# 
+# n_iter_vec = c(1000, 10000, 100000, 1000000)
+# n_machines = c(1,4,10)
+# #time_vec = matrix(NA, nrow=n_alternatives , ncol=4)
+# 
+# for (k in n_iter_vec){
+#   for (m in n_machines){
+#     nr_servers = m
+#     print(m)
+#     nr_iter_vec = n_iter_vec  
+#   }
+#   
+#   shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
+#   clust <- makePSOCKcluster(names = c("greywagtail"))
+#   clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
+#   lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+#   stopCluster(clust)
+#   
+#   df = data.frame(lapply(lambda, function(y) y))
+#   colnames(df) <- paste0('x', seq_len(nr_servers))
+#   single_chain = df$x
+#   
+#   
+#   names <- c("greywagtail",
+#              "greyheron",
+#              "greypartridge",
+#              "greyplover")
+#   time_start = Sys.time()
+#   
+#   }
+# 
+# 
+# for (nr_servers in rep(1:4,5)) {
+#   time_start = Sys.time()
+# 
+#     shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
+#   
+#   clust <- makePSOCKcluster(names = server_sample)
+#   
+#   clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
+#   
+#   lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+#   
+#   stopCluster(clust)
+#   
+#   df = data.frame(lapply(lambda, function(y) y))
+#   colnames(df) <- paste0('x', seq_len(nr_servers))
+#   
+#   #  Combine results
+#   #df$mean = rowMeans(df)
+#   parallel_chain = weightsComputation(df, method="constant")
+#   print(nr_servers)
+#   print(Sys.time() - time_start)
+# }
