@@ -96,7 +96,7 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
      	log_lik_difference = thread_log_lik_diff;
      }
 
-     else if(*multicoreP == 0)
+     else if (*multicoreP == 0)
      {
      	//printf("Not doing multicore\n");
      	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
@@ -126,5 +126,5 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
     vec_xP[i] = x;
   }
   
-  printf("Acceptance rate: %lf\n", (float) (acc_count)/n);
+  //printf("Acceptance rate: %lf\n", (float) (acc_count)/n);
 }

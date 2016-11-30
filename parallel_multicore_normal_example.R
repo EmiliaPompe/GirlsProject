@@ -7,7 +7,7 @@ time_start = Sys.time()
 #  Generate data and specify params
 ############################################################################
 sigma_known = 1.0
-nr_observations = 10000
+nr_observations = 30000
 observations <- rnorm(nr_observations, 3, sigma_known)
 
 n_iter = 100000
@@ -82,7 +82,7 @@ names <- c("greywagtail",
           "greypartridge",
           "greyplover")
 
-for (nr_servers in 1:4) {
+for (nr_servers in rep(1:4,5)) {
   time_start = Sys.time()
   server_sample <- sample(names, nr_servers, replace=FALSE)
   shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
@@ -101,5 +101,6 @@ for (nr_servers in 1:4) {
   #  Combine results
   #df$mean = rowMeans(df)
   parallel_chain = weightsComputation(df, method="constant")
-  cat(nr_servers, Sys.time() - time_start)
+  print(nr_servers)
+  print(Sys.time() - time_start)
 }
