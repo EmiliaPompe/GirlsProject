@@ -10,13 +10,10 @@
 #include "distributions_v2.h"
 
 
-void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
+void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, int *restrict num_coresP, double *restrict vec_xP)
 {
 
-<<<<<<< HEAD
   bool multicore = *multicoreP;
-=======
->>>>>>> 743f1ad498d48f1022bea4fbc4603b177b351c09
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
@@ -24,14 +21,13 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
-<<<<<<< HEAD
+
   	time_t epoch_time;
     epoch_time = time( NULL );
-=======
+
   	struct timeval tv;
   	gettimeofday(&tv,NULL);
 
->>>>>>> 743f1ad498d48f1022bea4fbc4603b177b351c09
     //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
@@ -61,7 +57,7 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
      	//split the data
 
      	//printf("%d\n", omp_get_max_threads( ));   // To check what's available
-	    num_cores = 4;
+	    num_cores = *num_coresP;
 	    omp_set_num_threads(num_cores);  // 8 local machine. OxWaSP servers have 48 so can change this when on multiple machines
 	    
 	    remainder = *data_lenP % num_cores; // the amount of data remaining if split data equally across cores
