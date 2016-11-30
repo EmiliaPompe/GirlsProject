@@ -13,10 +13,8 @@
 void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
 
-
-
-
   bool multicore = *multicoreP;
+  //multicore = false;
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
@@ -26,7 +24,7 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   if(rP == NULL) {  //set up random numbers generator
   	time_t epoch_time;
     epoch_time = time( NULL );
-    printf("%i\n", epoch_time);
+    //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
     gsl_rng_set (rP, (unsigned long int) epoch_time);
@@ -49,20 +47,6 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
     x_proposed = x + gsl_ran_gaussian(rP, sigma);  // random walk MH
     prior_ratio = pow(gsl_ran_gaussian_pdf(x_proposed - mean_prior, sigma_prior)/gsl_ran_gaussian_pdf(x - mean_prior, sigma_prior), (1.0/s)) ;
     
-    if (multicore == false)
-    {
-    	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
-  		double v_result_x[*data_lenP], v_result2_x[*data_lenP];
-
-    	subtractConst(dataP, *data_lenP, x_proposed, v_result_x_proposed);
-	    squareVectElementwise(v_result_x_proposed, *data_lenP, v_result2_x_proposed);
-	    
-	    subtractConst(dataP, *data_lenP, x, v_result_x);
-	    squareVectElementwise(v_result_x, *data_lenP, v_result2_x);
-	    
-	    log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
-	      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
-    }
   
     if (multicore == true)
      {	
@@ -114,7 +98,18 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
      }
 
      else{
-     	printf("Multicore argument must be true or false\n");
+     	//printf("Not doing multicore\n");
+     	double v_result_x_proposed[*data_lenP], v_result2_x_proposed[*data_lenP];
+  		double v_result_x[*data_lenP], v_result2_x[*data_lenP];
+
+    	subtractConst(dataP, *data_lenP, x_proposed, v_result_x_proposed);
+	    squareVectElementwise(v_result_x_proposed, *data_lenP, v_result2_x_proposed);
+	    
+	    subtractConst(dataP, *data_lenP, x, v_result_x);
+	    squareVectElementwise(v_result_x, *data_lenP, v_result2_x);
+	    
+	    log_lik_difference = (-1.0) * sum(v_result2_x_proposed, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known)) 
+	      + sum(v_result2_x, *data_lenP) * (1.0/(2.0*sigma_known*sigma_known));
      }
 
     //back to series, and calculate acceptance
