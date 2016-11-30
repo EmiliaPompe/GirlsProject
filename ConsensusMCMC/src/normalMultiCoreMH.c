@@ -5,7 +5,7 @@
 #include <gsl/gsl_randist.h>
 #include <omp.h>
 #include <stdbool.h>
-#include <time.h>
+#include <sys/time.h>
 #include "utilities.h"
 #include "distributions_v2.h"
 
@@ -22,12 +22,13 @@ void NormalMultiCoreMH(bool *restrict multicoreP, double *restrict dataP, int *r
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
-  	time_t epoch_time;
-    epoch_time = time( NULL );
+  	struct timeval tv;
+  	gettimeofday(&tv,NULL);
+
     //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
-    gsl_rng_set (rP, (unsigned long int) epoch_time);
+    gsl_rng_set (rP, (unsigned long int) 1000000*tv.tv_sec+tv.tv_usec);
   }
   
   acc_count = 0;
