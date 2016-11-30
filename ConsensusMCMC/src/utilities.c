@@ -49,6 +49,28 @@ void squareVectElementwise(double *v, int length_v, double *v_result)
 
 }
 
+
+void divideVectElementwise(double *v, double *x, int length_v, double *result)
+{
+  //double v_result[length_v];
+  
+  for (int i=0; i<length_v; i++){
+    result[i] = v[i]/x[i];
+  }
+  
+}
+
+void subVectElementwise(double *v, double *x, int length_v, double *result)
+{
+
+  for (int i=0; i<length_v; i++){
+    result[i] = v[i]-x[i];
+  }
+  
+}
+
+
+
 //#include <stdio.h>
 //
 //int main(void)

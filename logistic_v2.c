@@ -30,26 +30,29 @@ int main(void) // here we have matrix_x instead of vec
   int data[5] = {1,0,1,0,0};
   int data_len =5;
   int ncol = 2;
-  double sigma_matrix[4] = {1.0,0.0,0.0,1.0}; //for MH algorithm
+  double sigma[2] = {0.1, 0.15}; //for MH algorithm
   double mean_prior[2] = {0.0, 0.0};
-  double sigma_prior[4] = {1.0, 0.0, 0.0, 1.0};
+  double sigma_prior[2] = {1.0,  0.1};
   double s =1.0; //nr of servers  TO DO: change it later to int
   int n_iter = 10; // nr of iterations
   double result; // TO DO now set (result will be a matrix)
-  double x_0[2] = {1.0,0.5};
+  double x[2] = {1.0,0.5}; //initial value
   double result_divide_x_proposed[ncol];
   double result_divide_x[ncol];
-
+  double vec_xP[ncol*data_len]; // here we store our anser - a very long vector, then we create a matrix out of it
 
   //They will not be arguments
   int i, j;
-  double sigma, u, acc_prob,   prior_ratio, log_lik_difference;
+  double u, acc_prob,   prior_ratio, log_lik_difference;
   double[ncol] x;
   double[ncol] x_proposed;
+  double aux_v[ncol*data_len]; // created in order to move along z
+  double dot_prod_x_proposed, dot_prod_x;
+  
 
   int acc_count=0;
 
-  x=0.0;
+
 
 
   double z[10] = {1.0,0.5, // z keeps our fake data (matrix)
@@ -74,33 +77,55 @@ int main(void) // here we have matrix_x instead of vec
 
 
   //vec_xP[0] = x; // *(myPointer + index) and myPointer[index] are equivalent
+  for(j=0, j <ncol, j++){
+    vec_xP[j] = x[j]; //initial value
+  }  
+  
   for (i=1; i<n_iter; i++)
     {
      for(j=0, j <ncol, j++){
         x_proposed[j] = x[j] + gsl_ran_gaussian(rP, sigma[i]);  // random walk MH; how do generate different numbers? it should be scaled times L later
      }
-     //gsl_ran_multivariate_gaussian (const gsl_rng * r, const gsl_vector * mu, const gsl_matrix * L, gsl_vector * result); //remember about cholesky factorization
+     
  //if we want to include mean_prior !=0, we should substract it here
- divideVectElementwise(x_proposed, sigma_prior, ncol, result_divide_x_proposed);
- divideVectElementwise(x, sigma_prior, ncol, result_divide_x);
+   divideVectElementwise(x_proposed, sigma_prior, ncol, result_divide_x_proposed);
+   divideVectElementwise(x, sigma_prior, ncol, result_divide_x);
 // this assumes prior mean = 0
    prior_ratio = pow( exp(-0.5*cblas_ddot(ncol,result_divide_x_proposed , 1, result_divide_x_proposed,1) + 0.5*cblas_ddot(ncol,result_divide_x , 1, result_divide_x,1));, (1.0/s)) ;
-    //can go paralel here, calc marginal liklihoods, then recombine with a product
-    //change log_lik completely; remember about the dpt product gsl_blas_sdsdot
-    //log_lik_difference = sum(squareVectElementwise(subtractConst(dataP, *data_lenP, x_proposed), *data_lenP), *data_lenP)* (-1.0/(sigma_known*sigma_known)) - sum(squareVectElementwise(subtractConst(dataP, *data_lenP, x),*data_lenP), *data_lenP)* (-1.0/(sigma_known*sigma_known));
-    //back to series, and calculate acceptance
-    //acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
-    //acc_prob = min(1.0, normalTargetDistribution_v2(&x_proposed,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP)/normalTargetDistribution_v2(&x,  dataP,  data_lenP,  mean_priorP, sigma_priorP, sigma_knownP, sP));
-    //u = gsl_ran_flat(rP,0.0,1.0);
-    //if (u < acc_prob)
-    //{
-      //x = x_proposed;
-      //acc_count++;
+   
+   log_lik_difference = 0; // we set log_lik_sum to 0 before each iteration
+   aux_v = z;
+   for(j=0, j <ncol, j++){
+     
+     dot_prod_x_proposed = cblas_ddot(ncol, aux_v , 1, x_proposed,1);
+     dot_prod_x = cblas_ddot(ncol, aux_v , 1, x,1);
+     
+     if(data[j]==1){ // when a success in data
+       log_lik_difference = log_lik_difference  - log(1 + exp(dot_prod_x_proposed)) + log(1 + exp(dot_prod_x));
+     } else{    // when a failure in data
+       log_lik_difference = log_lik_difference  + log(exp(dot_prod_x_proposed)/(1 + exp(dot_prod_x_proposed))) + log(exp(dot_prod_x)/(1 + exp(dot_prod_x)));
+     }
+     
+     aux_v = aux_v+ncol;
+   }
+   
+  
+   acc_prob = min(1.0, prior_ratio * exp(log_lik_difference));
+   u = gsl_ran_flat(rP,0.0,1.0);
+    if (u < acc_prob)
+    {
+      for(j=0, j <ncol, j++){
+        x[j] = x_proposed[j];
+        }  
+     acc_count++;
     }
+    for(j=0, j <ncol, j++){
+      vec_xP[i*ncol+j] = x[j];
+    }  
 
-    //vec_xP[i] = x;
+    
   //}
-  //printf("Acceptance rate: %lf\n", (float) acc_count/n);
+  //printf("Acceptance rate: %lf\n", (float) acc_count/n_iter);
   return(0);
 }
 

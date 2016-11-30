@@ -1,7 +1,6 @@
-devtools::load_all("ConsensusMCMC")
-library(parallel)
 library(devtools)
-library(ggplot2)
+devtools::load_all("ConsensusMCMC")
+
 
 set.seed(15)
 
