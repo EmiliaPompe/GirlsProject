@@ -27,7 +27,6 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
   	struct timeval tv;
   	gettimeofday(&tv,NULL);
 
-    //printf("%i\n", epoch_time);
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
     gsl_rng_set (rP, (unsigned long int) 1000000*tv.tv_sec+tv.tv_usec);

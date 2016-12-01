@@ -5,6 +5,7 @@
 #include <gsl/gsl_randist.h>
 #include <cblas.h>
 #include "utilities.h"
+#include <sys/time.h>
 
 void LogisticMH(int *restrict dataP, double *restrict zP, int *restrict data_lenP, int *restrict ncolP, int *restrict n_iterP, double *restrict sigmaP, double *restrict sigma_priorP, double *restrict mean_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {

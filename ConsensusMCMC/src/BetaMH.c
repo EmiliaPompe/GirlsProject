@@ -5,6 +5,8 @@
 #include <gsl/gsl_randist.h>
 #include "utilities.h"
 
+
+
 void BetaMH(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
   
