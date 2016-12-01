@@ -51,7 +51,7 @@ TracePlot <- function(list_of_vectors, method = NULL, burn_in = 0.1, size_line =
 }
 
 # example
-TracePlot(list(rnorm(100), rnorm(100)), method = c('single machine', 'several machines'), burn_in=0.2)
+#TracePlot(list(rnorm(100), rnorm(100)), method = c('single machine', 'several machines'), burn_in=0.2)
 
 
 HistPlot <- function(list_of_vectors, method = NULL, burn_in =0.1, size_line = 1,  ...){
@@ -81,7 +81,7 @@ HistPlot <- function(list_of_vectors, method = NULL, burn_in =0.1, size_line = 1
 }
   
 
-HistPlot(list(rnorm(1000), rnorm(1000)), method = c('single machine', 'several machines'), 0.2, size_line=2)
+#HistPlot(list(rnorm(1000), rnorm(1000)), method = c('single machine', 'several machines'), 0.2, size_line=2)
 
 
 ACFPlot <- function(chain, lag.max = 10, ...){

@@ -12,8 +12,6 @@
 #' parallel_markov_chain = weightsComputation(df, method = "sample variance")
 #' 
 
-### function to compute weights to aggregate parallel MCMC (constant weights or sample variance) 
-
 weightsComputation = function(df, method){
    
   if (method == "constant"){

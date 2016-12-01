@@ -32,7 +32,7 @@ algorithm having a univariate normal distribution as target distribution.
 }
 \examples{
 # Generate data
-observations <- rnorm(10000, 1 , sigma_known)
+observations = rnorm(10000, 1 , sigma_known)
 
 # Set the parameters for the function
 sigma_known = 1

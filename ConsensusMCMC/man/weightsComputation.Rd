@@ -7,19 +7,21 @@
 weightsComputation(df, method)
 }
 \arguments{
-\item{df}{A dataframe derived from running \code{\link{BetaMH}}}
+\item{df}{A dataframe derived from running \code{\link{BetaMH}} or \code{\link{NormalMH}} or \code{\link{GammaMH}} on the relative data.}
 
-\item{y}{A number}
+\item{method}{The method that needs to be used to aggregate the markov chains obtained from different machines. Need to be used when running in parallel.}
 }
 \value{
-The sum of \code{x} and \code{y}
+The functions returns the aggregated Markov chain from the Consensus MCMC.
 }
 \description{
 \code{} The function computes the weights used for the Consensus MCMC algorithm. 
 The computed weights are used to aggregate the Markov Chains obtained parallelizing the data on different machines.
 }
 \examples{
-add(1, 1)
-add(10, 1)
+
+df = data.frame(lapply(lambda, function(y) y))
+parallel_markov_chain = weightsComputation(df, method = "sample variance")
+
 }
 

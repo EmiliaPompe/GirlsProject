@@ -30,7 +30,7 @@ algorithm having a univariate beta distribution as target distribution.
 }
 \examples{
 # Generate data
-observations <- rbinom(10000, size = 1, prob = 0.5)
+observations = rbinom(10000, size = 1, prob = 0.5)
 
 # Set the parameters for the function
 nr_servers = 1 
