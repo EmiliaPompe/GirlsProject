@@ -4,6 +4,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utilities.h"
+#include <sys/time.h>
 
 void BetaMH(double *restrict dataP, int *restrict data_lenP, int *restrict nP, double *restrict sigmaP, double *restrict alpha_priorP, double *restrict beta_priorP, int *restrict sP, double *restrict x_0P, double *restrict vec_xP)
 {
@@ -15,9 +16,12 @@ void BetaMH(double *restrict dataP, int *restrict data_lenP, int *restrict nP, d
   static gsl_rng *restrict rP = NULL;
   
   if(rP == NULL) {  //set up random numbers generator
+    struct timeval tv;
+    gettimeofday(&tv,NULL);
+
     gsl_rng_env_setup();
     rP = gsl_rng_alloc(gsl_rng_mt19937);
-    gsl_rng_set (rP, (unsigned long int) *dataP);
+    gsl_rng_set (rP, (unsigned long int) 1000000*tv.tv_sec+tv.tv_usec);
   }
   
   acc_count = 0;
