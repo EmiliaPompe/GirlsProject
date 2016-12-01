@@ -11,6 +11,5 @@ NormalMH                MH-Algorithm for a Univariate Normal target
                         distribution.
 QQPlot                  QQPlot for two Markov chains.
 TracePlot               Trace plots for a list of Markov chains.
-gslrng                  Random number generation
 weightsComputation      Weights computation for Consensus MCMC
                         algorithm

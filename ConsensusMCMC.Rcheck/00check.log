@@ -1,4 +1,4 @@
-* using log directory ‘/homes/aglietti/Workspace/GirlsProject/ConsensusMCMC.Rcheck’
+* using log directory ‘/homes/loach/Workspace/GirlsProject/ConsensusMCMC.Rcheck’
 * using R version 3.3.1 (2016-06-21)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: UTF-8
@@ -12,6 +12,14 @@ Subdirectory ‘ConsensusMCMC/src’ contains apparent object files/libraries
   BetaMH.o ConsensusMCMC.so gammaMH.o logisticMH.o normalMH.o
   normalMultiCoreMH.o utilities.o
 Object files/libraries should not be included in a source package.
+
+In addition to the above warning(s), found the following notes:
+
+Found the following apparent object files/libraries:
+  ConsensusMCMC.Rcheck/ConsensusMCMC/libs/ConsensusMCMC.so
+Object files/libraries should not be included in a source package.
+
+Subdirectory ‘ConsensusMCMC.Rcheck/ConsensusMCMC’ seems to contain an installed version of the package.
 * checking if there is a namespace ... OK
 * checking for executable files ... WARNING
 Found the following executable file:
@@ -33,7 +41,10 @@ structure’ in the ‘Writing R Extensions’ manual.
 * checking top-level files ... OK
 * checking for left-over files ... OK
 * checking index information ... OK
-* checking package subdirectories ... OK
+* checking package subdirectories ... WARNING
+Found the following directory with the name of a check directory:
+  ./ConsensusMCMC.Rcheck
+Most likely, these were included erroneously.
 * checking R files for non-ASCII characters ... OK
 * checking R files for syntax errors ... OK
 * checking whether the package can be loaded ... OK
@@ -89,13 +100,11 @@ Undocumented code objects:
 All user-level objects in a package should have documentation entries.
 See chapter ‘Writing R documentation files’ in the ‘Writing R
 Extensions’ manual.
-* checking for code/documentation mismatches ... WARNING
-Functions or methods with usage in documentation object 'gslrng' but not in code:
-  gslrng
-
+* checking for code/documentation mismatches ... OK
 * checking Rd \usage sections ... OK
 * checking Rd contents ... OK
-* checking for unstated dependencies in examples ... OK
+* checking for unstated dependencies in examples ... WARNING
+'::' or ':::' import not declared from: ‘devtools’
 * checking line endings in C/C++/Fortran sources/headers ... OK
 * checking line endings in Makefiles ... NOTE
 Found the following Makefile(s) without a final LF:
@@ -117,24 +126,7 @@ Compiled code should not call entry points which might terminate R nor
 write to stdout/stderr instead of to the console, nor the system RNG.
 
 See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.
-* checking examples ... ERROR
-Running examples in ‘ConsensusMCMC-Ex.R’ failed
-The error most likely occurred in:
-
-> ### Name: ACFPlot
-> ### Title: Plot for the autocorrelation function of a given Markov chain.
-> ### Aliases: ACFPlot
-> 
-> ### ** Examples
-> 
-> # Generate two sets of values
-> chain = rnorm(100)
-> 
-> # Produce the plot
-> ACFPlot(chain, ggtitle('acf'))
-Error in min(lag.max, sampleT - 1L) : invalid 'type' (list) of argument
-Calls: ACFPlot -> with -> acf
-Execution halted
+* checking examples ... OK
 * checking PDF version of manual ... OK
 * DONE
-Status: 1 ERROR, 5 WARNINGs, 5 NOTEs
+Status: 6 WARNINGs, 5 NOTEs

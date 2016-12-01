@@ -2,7 +2,6 @@ ACFPlot	ACFPlot
 BetaMH	BetaMH
 ConsensusMCMC	ConsensusMCMC-package
 GammaMH	GammaMH
-gslrng	gslrng
 HistPlot	HistPlot
 NormalMH	NormalMH
 QQPlot	QQPlot

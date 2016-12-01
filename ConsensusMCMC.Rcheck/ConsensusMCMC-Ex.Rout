@@ -41,7 +41,382 @@ Loading required package: parallel
 > chain = rnorm(100)
 > 
 > # Produce the plot
-> ACFPlot(chain, ggtitle('acf'))
-Error in min(lag.max, sampleT - 1L) : invalid 'type' (list) of argument
-Calls: ACFPlot -> with -> acf
-Execution halted
+> ACFPlot(chain, lag.max=10, ggtitle('acf'))
+Warning: Stacking not well defined when ymin != 0
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("BetaMH")
+> ### * BetaMH
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: BetaMH
+> ### Title: MH-Algorithm for a Univariate Beta target distribution.
+> ### Aliases: BetaMH
+> 
+> ### ** Examples
+> 
+> # Generate data
+> observations = rbinom(10000, size = 1, prob = 0.5)
+> 
+> # Set the parameters for the function
+> nr_servers = 1 
+> n_iter = 1000
+> burn_in = 0.1*n_iter
+> sigma = 0.01
+> alpha_prior = 1.0
+> beta_prior = 1.0
+> x_0 = 0.1
+> 
+> 
+> # Run the function for the chosen parameters
+> markov_chain = BetaMH(data=observations,
++                n = n_iter,
++                sigma = sigma, 
++                alpha_prior = alpha_prior, 
++                beta_prior = beta_prior, 
++                s = 1, 
++                x_0 = x_0)
+Acceptance rate: 0.459000
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("GammaMH")
+> ### * GammaMH
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: GammaMH
+> ### Title: MH-Algorithm for a Univariate Gamma target distribution.
+> ### Aliases: GammaMH
+> 
+> ### ** Examples
+> 
+> # Generate data
+> observations = rpois(10000, 4)
+> 
+> # Set the parameters for the function
+> nr_servers = 1 
+> n_iter = 100000
+> burn_in = 0.1*n_iter
+> sigma = 0.01
+> k_prior = 1.0
+> theta_prior = 4.0
+> x_0 = 4
+> 
+> # Run the function for the chosen parameters
+> markov_chain = GammaMH(data=observations, 
++                        n = n_iter, 
++                        sigma = sigma, 
++                        k_prior = k_prior, 
++                        theta_prior = theta_prior, 
++                        s = 1, 
++                        x_0 = x_0) 
+Acceptance rate: 0.840020
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("HistPlot")
+> ### * HistPlot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: HistPlot
+> ### Title: Density estimates of the histograms for a list of Markov chains.
+> ### Aliases: HistPlot
+> 
+> ### ** Examples
+> 
+> # Generate two sets of values
+> chain1 = rnorm(100)
+> chain2 = rnorm(100)
+> 
+> # Produce the density plots
+> HistPlot(list(chain1, chain2), 
++          method = c('Single machine', 'Multiple machines'), 
++          burn_in = 0.2, 
++          size_line = 2)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("NormalMH")
+> ### * NormalMH
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: NormalMH
+> ### Title: MH-Algorithm for a Univariate Normal target distribution.
+> ### Aliases: NormalMH
+> 
+> ### ** Examples
+> 
+> 
+> # Set the parameters for the function
+> sigma_known = 1
+> nr_servers = 1 
+> n_iter = 1000
+> burn_in = 0.1*n_iter
+> sigma = 0.01
+> mean_prior = 0.0
+> sigma_prior = 1.0
+> x_0 = 0.0
+> 
+> # Generate data
+> observations = rnorm(10000, 1 , sigma_known)
+> 
+> # Run the function for the chosen parameters
+> markov_chain = NormalMH(data= observations, 
++                n = n_iter, 
++                sigma = sigma, 
++                mean_prior = mean_prior, 
++                sigma_prior = sigma_prior, 
++                sigma_known = sigma_known, 
++                s = nr_servers, 
++                x_0 = x_0) 
+Acceptance rate: 0.674000
+> 
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("QQPlot")
+> ### * QQPlot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: QQPlot
+> ### Title: QQPlot for two Markov chains.
+> ### Aliases: QQPlot
+> 
+> ### ** Examples
+> 
+> # Generate two sets of values
+> chain1=rnorm(100)
+> chain2=rnorm(100)
+> 
+> # Produce the qqplot
+> QQPlot(chain1=rnorm(100), chain2=rnorm(100))
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("TracePlot")
+> ### * TracePlot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: TracePlot
+> ### Title: Trace plots for a list of Markov chains.
+> ### Aliases: TracePlot
+> 
+> ### ** Examples
+> 
+> # Generate two sets of values
+> chain1 = rnorm(100)
+> chain2 = rnorm(100)
+> 
+> # Produce the trace plots
+> TracePlot(list(chain1, chain2), 
++          method = c('Single machine', 'Multiple machines'), 
++          burn_in = 0.2)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("weightsComputation")
+> ### * weightsComputation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: weightsComputation
+> ### Title: Weights computation for Consensus MCMC algorithm
+> ### Aliases: weightsComputation
+> 
+> ### ** Examples
+> 
+> 
+> 
+> ############################################################################
+> #  Generate data and specify params
+> ############################################################################
+> 
+> sigma_known = 1
+> observations <- rnorm(10000, 3 , sigma_known)
+> nr_servers <- 4
+> shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
+> 
+> n_iter = 10000
+> burn_in = 0.1*n_iter
+> sigma = 0.01  # sigma for the proposal distribution
+> mean_prior=0
+> sigma_prior=1.0
+> x_0 = -5
+> 
+> ############################################################################
+> #  Split data into shards and run on 4 machines
+> ############################################################################
+> 
+> clust <- makePSOCKcluster(names = c("greywagtail",
++                                     "greyheron",
++                                     "greypartridge",
++                                     "greyplover"))
+> 
+> clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
+[[1]]
+[[1]]$env
+<environment: namespace:ConsensusMCMC>
+
+[[1]]$data
+character(0)
+
+[[1]]$code
+ [1] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/ACFPlot.R"                      
+ [2] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/BetaMH.R"                       
+ [3] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/GammaMH.R"                      
+ [4] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/HistPlot.R"                     
+ [5] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/LogisticMH.R"                   
+ [6] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMH.R"                     
+ [7] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMultiCoreMH.R"            
+ [8] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/QQplot.R"                       
+ [9] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/TracePlot.R"                    
+[10] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_function.R"             
+[11] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_multivariate_function.R"
+
+[[1]]$dll
+[[1]]$dll$ConsensusMCMC
+DLL name: ConsensusMCMC
+Filename:
+        /homes/loach/Workspace/GirlsProject/ConsensusMCMC/src/ConsensusMCMC.so
+Dynamic lookup: TRUE
+
+
+
+[[2]]
+[[2]]$env
+<environment: namespace:ConsensusMCMC>
+
+[[2]]$data
+character(0)
+
+[[2]]$code
+ [1] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/ACFPlot.R"                      
+ [2] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/BetaMH.R"                       
+ [3] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/GammaMH.R"                      
+ [4] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/HistPlot.R"                     
+ [5] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/LogisticMH.R"                   
+ [6] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMH.R"                     
+ [7] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMultiCoreMH.R"            
+ [8] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/QQplot.R"                       
+ [9] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/TracePlot.R"                    
+[10] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_function.R"             
+[11] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_multivariate_function.R"
+
+[[2]]$dll
+[[2]]$dll$ConsensusMCMC
+DLL name: ConsensusMCMC
+Filename:
+        /homes/loach/Workspace/GirlsProject/ConsensusMCMC/src/ConsensusMCMC.so
+Dynamic lookup: TRUE
+
+
+
+[[3]]
+[[3]]$env
+<environment: namespace:ConsensusMCMC>
+
+[[3]]$data
+character(0)
+
+[[3]]$code
+ [1] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/ACFPlot.R"                      
+ [2] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/BetaMH.R"                       
+ [3] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/GammaMH.R"                      
+ [4] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/HistPlot.R"                     
+ [5] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/LogisticMH.R"                   
+ [6] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMH.R"                     
+ [7] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMultiCoreMH.R"            
+ [8] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/QQplot.R"                       
+ [9] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/TracePlot.R"                    
+[10] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_function.R"             
+[11] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_multivariate_function.R"
+
+[[3]]$dll
+[[3]]$dll$ConsensusMCMC
+DLL name: ConsensusMCMC
+Filename:
+        /homes/loach/Workspace/GirlsProject/ConsensusMCMC/src/ConsensusMCMC.so
+Dynamic lookup: TRUE
+
+
+
+[[4]]
+[[4]]$env
+<environment: namespace:ConsensusMCMC>
+
+[[4]]$data
+character(0)
+
+[[4]]$code
+ [1] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/ACFPlot.R"                      
+ [2] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/BetaMH.R"                       
+ [3] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/GammaMH.R"                      
+ [4] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/HistPlot.R"                     
+ [5] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/LogisticMH.R"                   
+ [6] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMH.R"                     
+ [7] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/NormalMultiCoreMH.R"            
+ [8] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/QQplot.R"                       
+ [9] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/TracePlot.R"                    
+[10] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_function.R"             
+[11] "/homes/loach/Workspace/GirlsProject/ConsensusMCMC/R/weights_multivariate_function.R"
+
+[[4]]$dll
+[[4]]$dll$ConsensusMCMC
+DLL name: ConsensusMCMC
+Filename:
+        /homes/loach/Workspace/GirlsProject/ConsensusMCMC/src/ConsensusMCMC.so
+Dynamic lookup: TRUE
+
+
+
+> 
+> lambda <- clusterApplyLB(clust, shards, NormalMH, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+> 
+> stopCluster(clust)
+> 
+> df = data.frame(lapply(lambda, function(y) y))
+> parallel_markov_chain = weightsComputation(df, method = "sample variance")
+Acceptance rate: 0.772900
+Acceptance rate: 0.770800
+Acceptance rate: 0.773700
+Acceptance rate: 0.769100
+> 
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  1.451 0.021 5.963 0.002 0.004 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

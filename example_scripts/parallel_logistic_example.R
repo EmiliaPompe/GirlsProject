@@ -3,8 +3,8 @@ devtools::load_all("ConsensusMCMC")
 
 
 set.seed(15)
-# load our data frame
-load('logistic_data_frame.RData')
+# load our data frame. e.g.g there is a data folder containing an example in the package directory
+# load('data/logistic_data_frame.RData')
 #################################################################################################################
 ## Set parameters
 #################################################################################################################

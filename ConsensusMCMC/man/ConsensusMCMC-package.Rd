@@ -23,16 +23,7 @@ Virginia Aglietti, Tamar Loach, Emilia Pompe
 Maintainer: Virginia Aglietti <virginia.aglietti@stats.ox.ac.uk>, Tamar Loach <tamar.loach@stats.ox.ac.uk>, Emilia Pompe <emilia.pompe@stats.ox.ac.uk>.
 }
 \references{
-@article{scott2016bayes,
-  title={Bayes and big data: The consensus Monte Carlo algorithm},
-  author={Scott, Steven L and Blocker, Alexander W and Bonassi, Fernando V and Chipman, Hugh A     and George, Edward I and McCulloch, Robert E},
-  journal={International Journal of Management Science and Engineering Management},
-  volume={11},
-  number={2},
-  pages={78--88},
-  year={2016},
-  publisher={Taylor \& Francis}
-}
+Scott et al., 2016
 }
 \keyword{ package }
 

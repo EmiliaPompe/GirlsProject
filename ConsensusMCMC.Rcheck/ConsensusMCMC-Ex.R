@@ -20,7 +20,7 @@ flush(stderr()); flush(stdout())
 chain = rnorm(100)
 
 # Produce the plot
-ACFPlot(chain, ggtitle('acf'))
+ACFPlot(chain, lag.max=10, ggtitle('acf'))
 
 
 
@@ -51,8 +51,8 @@ x_0 = 0.1
 
 
 # Run the function for the chosen parameters
-markov_chain = NormalMH(observations,
-               n_iter = n_iter,
+markov_chain = BetaMH(data=observations,
+               n = n_iter,
                sigma = sigma, 
                alpha_prior = alpha_prior, 
                beta_prior = beta_prior, 
@@ -87,8 +87,8 @@ theta_prior = 4.0
 x_0 = 4
 
 # Run the function for the chosen parameters
-markov_chain = GammaMH(observations, 
-                       n_iter = n_iter, 
+markov_chain = GammaMH(data=observations, 
+                       n = n_iter, 
                        sigma = sigma, 
                        k_prior = k_prior, 
                        theta_prior = theta_prior, 
@@ -136,8 +136,6 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
-# Generate data
-observations = rnorm(10000, 1 , sigma_known)
 
 # Set the parameters for the function
 sigma_known = 1
@@ -149,8 +147,11 @@ mean_prior = 0.0
 sigma_prior = 1.0
 x_0 = 0.0
 
+# Generate data
+observations = rnorm(10000, 1 , sigma_known)
+
 # Run the function for the chosen parameters
-markov_chain = NormalMH(observations, 
+markov_chain = NormalMH(data= observations, 
                n = n_iter, 
                sigma = sigma, 
                mean_prior = mean_prior, 
@@ -210,23 +211,6 @@ TracePlot(list(chain1, chain2),
 
 
 cleanEx()
-nameEx("gslrng")
-### * gslrng
-
-flush(stderr()); flush(stdout())
-
-### Name: gslrng
-### Title: Random number generation
-### Aliases: gslrng
-
-### ** Examples
-
-gslrng(5)
-gslrng(20)
-
-
-
-cleanEx()
 nameEx("weightsComputation")
 ### * weightsComputation
 
@@ -238,6 +222,38 @@ flush(stderr()); flush(stdout())
 
 ### ** Examples
 
+
+
+############################################################################
+#  Generate data and specify params
+############################################################################
+
+sigma_known = 1
+observations <- rnorm(10000, 3 , sigma_known)
+nr_servers <- 4
+shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
+
+n_iter = 10000
+burn_in = 0.1*n_iter
+sigma = 0.01  # sigma for the proposal distribution
+mean_prior=0
+sigma_prior=1.0
+x_0 = -5
+
+############################################################################
+#  Split data into shards and run on 4 machines
+############################################################################
+
+clust <- makePSOCKcluster(names = c("greywagtail",
+                                    "greyheron",
+                                    "greypartridge",
+                                    "greyplover"))
+
+clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
+
+lambda <- clusterApplyLB(clust, shards, NormalMH, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+
+stopCluster(clust)
 
 df = data.frame(lapply(lambda, function(y) y))
 parallel_markov_chain = weightsComputation(df, method = "sample variance")

@@ -24,7 +24,7 @@ The function returns the acf plot for a specified Markov chain.
 chain = rnorm(100)
 
 # Produce the plot
-ACFPlot(chain, ggtitle('acf'))
+ACFPlot(chain, lag.max=10, ggtitle('acf'))
 
 }
 

@@ -42,8 +42,8 @@ theta_prior = 4.0
 x_0 = 4
 
 # Run the function for the chosen parameters
-markov_chain = GammaMH(observations, 
-                       n_iter = n_iter, 
+markov_chain = GammaMH(data=observations, 
+                       n = n_iter, 
                        sigma = sigma, 
                        k_prior = k_prior, 
                        theta_prior = theta_prior, 

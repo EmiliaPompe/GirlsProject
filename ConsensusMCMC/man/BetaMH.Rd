@@ -43,8 +43,8 @@ x_0 = 0.1
 
 
 # Run the function for the chosen parameters
-markov_chain = NormalMH(observations,
-               n_iter = n_iter,
+markov_chain = BetaMH(data=observations,
+               n = n_iter,
                sigma = sigma, 
                alpha_prior = alpha_prior, 
                beta_prior = beta_prior, 
