@@ -75,7 +75,7 @@ HistPlot <- function(list_of_vectors, method = NULL, burn_in =0.1, size_line = 1
       rep(method[i], times = length(list_of_vectors_after_burn_in[[i]]))
     }))
     
-    p <- ggplot(df, aes(x = chain, col = method)) + geom_density(size = size_line) +  l
+    p <- ggplot(df, aes(x = chain, col = method)) + geom_line(size = size_line, stat = "density") +  l
   }
   p
 }

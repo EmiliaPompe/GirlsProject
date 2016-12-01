@@ -59,7 +59,7 @@ single_chain = df[ ,1]
 
 
 #################################################################################################################
-## Plot results
+## Plot results OLD
 #################################################################################################################
 
 par(mfrow=c(1,1))
@@ -69,4 +69,52 @@ HistPlot(list(single_chain, parallel_chain[,1]),
 QQPlot(single_chain[burn_in:n_iter], parallel_chain[,1][burn_in:n_iter], line = TRUE)
 
 TracePlot(list(single_chain, parallel_chain[,1]), method = c('single machine', '4 machines'),  burn_in=0.3)
+
+#################################################################################################################
+## Plot results
+#################################################################################################################
+
+our_theme <-  theme(
+  axis.text = element_text(size = 12),
+  #legend.key = element_rect(fill = "navy"),s
+  #legend.background = element_rect(fill = "white"),
+  #legend.position = c(0.14, 0.80),
+  strip.text =element_text(size=14),
+  legend.text =element_text(size=14),
+  title = element_text(size=14),
+  plot.title = element_text(hjust=0.5))
+
+
+p = HistPlot(list(single_chain, parallel_chain[,1]), 
+             method = c("1 machine", "4 machines"), burn_in = 0.3, 
+             size_line = 1, ggtitle("Histograms for the logistic \nregression example"))
+
+ggsave("plots_presentation/hist_logistic.pdf", p +  our_theme)
+
+
+p = QQPlot(single_chain[burn_in:n_iter], parallel_chain[,1][burn_in:n_iter], 
+           line = TRUE, size_point = 2, size_line =1, ggtitle("QQplot for the logistic regression example"), 
+           xlab("Single Markov chain"), ylab("Parallel Markov chain"))
+p+our_theme
+ggsave("plots_presentation/qqplot_logistic.pdf", p +  our_theme)
+
+p = TracePlot(list(single_chain, parallel_chain[,1]), 
+              method = c('Single machine', '4 machines'),  
+              burn_in=0.3,
+              size_line = 1,
+              ggtitle("Trace plot for the logistic \nregression example"))
+
+ggsave("plots_presentation/traceplot_logistic.pdf", p +  our_theme)
+
+
+p1 = ACFPlot(single_chain, lag.max = 10, 
+             ggtitle("Single")) + our_theme
+
+p2 = ACFPlot(parallel_chain[,1], lag.max = 10, 
+             ggtitle("Parallel")) + our_theme
+
+p3 = grid.arrange(p1, p2, ncol = 2)
+ggsave("plots_presentation/acf_logistic.pdf", p3)
+
+
 
