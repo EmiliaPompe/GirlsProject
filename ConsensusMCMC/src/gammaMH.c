@@ -4,7 +4,7 @@
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 #include "utilities.h"
-#include "distributions_v2.h"
+
 
 void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict k_priorP, double *restrict theta_priorP, int *restrict sP, int *restrict x_0P, double *restrict vec_xP)
 {

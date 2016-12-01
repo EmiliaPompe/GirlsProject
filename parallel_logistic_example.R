@@ -114,3 +114,16 @@ df = data.frame(lapply(lambda, function(y) y))
 colnames(df) <- paste0('x', seq_len(nr_servers))
 single_chain = df$x
 
+
+#################################################################################################################
+## Plot results
+#################################################################################################################
+
+par(mfrow=c(1,1))
+HistPlot(list(single_markov_chain, parallel_markov_chain, theoretical_distribution), 
+         method = c("1 machine", "4 machines", "theoretical posterior distribution"), burn_in = 0.3)
+
+QQPlot(single_markov_chain[burn_in:n_iter], parallel_markov_chain[burn_in:n_iter], line = TRUE)
+
+TracePlot(list(single_markov_chain, parallel_markov_chain), method = c('single machine', '4 machines'),  burn_in=0.3)
+

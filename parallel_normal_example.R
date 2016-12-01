@@ -8,7 +8,7 @@ observations <- rnorm(10000, 3 , sigma_known)
 nr_servers <- 4
 shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/nr_servers))
 
-n_iter = 100
+n_iter = 10000
 burn_in = 0.1*n_iter
 sigma = 0.01  # sigma for the proposal distribution
 mean_prior=0

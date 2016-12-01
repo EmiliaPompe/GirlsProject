@@ -1,3 +1,5 @@
+# File to run on Amazon servers 
+
 sigma_known = 1.0
 nr_observations = 100000
 set.seed(9)
@@ -8,7 +10,7 @@ mean_prior=0.0
 sigma_prior=1.0
 x_0 = 0.0
 
-n_iter_vec = c(1000, 10000, 100000, 1000000)
+n_iter_vec = c(1000, 10000, 100000)
 n_machines = c(1,4,10)
 time_running_one_core = matrix(NA, nrow=3, ncol=4)
 
@@ -51,7 +53,7 @@ for (k in seq_along(n_iter_vec)){
   
 #####################
 n_iter_vec = c(1000, 10000, 100000, 1000000)
-n_cores = c(1, 4, 8 )
+n_cores = c(1, 4, 8)
 
 time_running_diff_cores = matrix(NA, nrow=3, ncol=4)
 

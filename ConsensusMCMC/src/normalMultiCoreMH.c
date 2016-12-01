@@ -7,7 +7,6 @@
 #include <stdbool.h>
 #include <sys/time.h>
 #include "utilities.h"
-#include "distributions_v2.h"
 
 
 void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, int *restrict num_coresP, double *restrict vec_xP)

@@ -74,7 +74,7 @@ HistPlot(list(single_chain, parallel_chain, theoretical), method = c("1 machine,
 cat(Sys.time() - time_start)
 
 ############################################################################
-#  Compare different number of computers
+#  Compare different number of computers - DONE ON AMAZON
 ############################################################################
 # 
 # n_iter_vec = c(1000, 10000, 100000, 1000000)
