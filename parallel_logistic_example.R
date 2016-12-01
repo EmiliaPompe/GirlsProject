@@ -23,6 +23,7 @@ burn_in = 0.2
 
 shards <- split(sample(1:nrow(logistic_data_frame),nrow(logistic_data_frame), replace = FALSE),
                 rep(seq_len(nr_servers),times = nrow(logistic_data_frame)/nr_servers))
+
 shards = lapply(shards, function(x) logistic_data_frame[x,])
 
 clust <- makePSOCKcluster(names = c("greywagtail",
@@ -47,9 +48,9 @@ parallel_chain = weightsMultivariateComputation(lambda, method="sample variance"
 
 nr_servers <- 1
 
-clust <- makePSOCKcluster(names = c("greywagtail"))
-clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
-lambda <- clusterApplyLB(clust, shards, LogisticMH, n_iter=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, s= 1, x_0 = x_0)
+clust2 <- makePSOCKcluster(names = c("greywagtail"))
+clusterEvalQ(cl = clust2, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
+lambda <- clusterApplyLB(clust2, list(logistic_data_frame), LogisticMH, n_iter=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, s= 1, x_0 = x_0)
 stopCluster(clust)
 
 df = data.frame(lapply(lambda, function(y) y))
