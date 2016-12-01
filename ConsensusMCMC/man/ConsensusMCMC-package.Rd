@@ -1,34 +1,38 @@
-\name{OxWaSP-package}
-\alias{OxWaSP-package}
-\alias{OxWaSP}
+\name{ConsensusMCMC-package}
+\alias{ConsensusMCMC}
+\alias{ConsensusMCMC}
 \docType{package}
 \title{
-OxWaSP example package
+ConsensusMCMC package
 }
 \description{
-An example package showing compiling and calling simple C code, including
-calling where there are external library dependencies and exotic compilers.}
+An package performing the ConsensusMCMC algorithm for different univariate and multivariate target distributions.}
 \details{
 \tabular{ll}{
-Package: \tab OxWaSP\cr
+Package: \tab ConsensusMCMC\cr
 Type: \tab Package\cr
 Version: \tab 1.1\cr
-Date: \tab 2015-02-21\cr
+Date: \tab 2016-12-01\cr
 License: \tab GPL-2\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
+
 }
 \author{
-Louis J. M. Aslett
+Virginia Aglietti, Tamar Loach, Emilia Pompe
 
-Maintainer: Louis J. M. Aslett <aslett@stats.ox.ac.uk>
+Maintainer: Virginia Aglietti <virginia.aglietti@stats.ox.ac.uk>, Tamar Loach <tamar.loach@stats.ox.ac.uk>, Emilia Pompe <emilia.pompe@stats.ox.ac.uk>.
 }
 \references{
-See OxWaSP slides for further information.
+@article{scott2016bayes,
+  title={Bayes and big data: The consensus Monte Carlo algorithm},
+  author={Scott, Steven L and Blocker, Alexander W and Bonassi, Fernando V and Chipman, Hugh A     and George, Edward I and McCulloch, Robert E},
+  journal={International Journal of Management Science and Engineering Management},
+  volume={11},
+  number={2},
+  pages={78--88},
+  year={2016},
+  publisher={Taylor \& Francis}
+}
 }
 \keyword{ package }
-\examples{
-sq(2)
-gslrng(5)
-ssq(1:1000,1001:2)
-}
+

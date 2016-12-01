@@ -7,11 +7,11 @@
 #' 
 #' @return The function returns the acf plot for a specified Markov chain. 
 #' @examples
-#' # Generate two sets of values
+#' # Generate one set of values
 #' chain = rnorm(100)
 #' 
 #' # Produce the plot
-#' ACFPlot(chain, ggtitle('acf'))
+#' ACFPlot(chain, lag.max = 10)
 #' 
 
 ACFPlot <- function(chain, lag.max = 10, ...){

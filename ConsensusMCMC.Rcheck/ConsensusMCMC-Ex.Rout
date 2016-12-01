@@ -1,0 +1,47 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "ConsensusMCMC"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('ConsensusMCMC')
+Loading required package: ggplot2
+Loading required package: parallel
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("ACFPlot")
+> ### * ACFPlot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ACFPlot
+> ### Title: Plot for the autocorrelation function of a given Markov chain.
+> ### Aliases: ACFPlot
+> 
+> ### ** Examples
+> 
+> # Generate two sets of values
+> chain = rnorm(100)
+> 
+> # Produce the plot
+> ACFPlot(chain, ggtitle('acf'))
+Error in min(lag.max, sampleT - 1L) : invalid 'type' (list) of argument
+Calls: ACFPlot -> with -> acf
+Execution halted

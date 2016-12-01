@@ -1,0 +1,16 @@
+ACFPlot                 Plot for the autocorrelation function of a
+                        given Markov chain.
+BetaMH                  MH-Algorithm for a Univariate Beta target
+                        distribution.
+ConsensusMCMC           ConsensusMCMC package
+GammaMH                 MH-Algorithm for a Univariate Gamma target
+                        distribution.
+HistPlot                Density estimates of the histograms for a list
+                        of Markov chains.
+NormalMH                MH-Algorithm for a Univariate Normal target
+                        distribution.
+QQPlot                  QQPlot for two Markov chains.
+TracePlot               Trace plots for a list of Markov chains.
+gslrng                  Random number generation
+weightsComputation      Weights computation for Consensus MCMC
+                        algorithm
