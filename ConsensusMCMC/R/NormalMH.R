@@ -28,7 +28,7 @@
 #' x_0 = 0.0
 #' 
 #' # Run the function for the chosen parameters
-#' markov_chain = NormalMH(observations, 
+#' markov_chain = NormalMH(observations = observations, 
 #'                n = n_iter, 
 #'                sigma = sigma, 
 #'                mean_prior = mean_prior, 
