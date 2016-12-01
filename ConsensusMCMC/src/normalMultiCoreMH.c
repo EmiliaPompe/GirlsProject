@@ -21,9 +21,6 @@ void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *re
   
   if(rP == NULL) {  //set up random numbers generator
 
-  	time_t epoch_time;
-    epoch_time = time( NULL );
-
   	struct timeval tv;
   	gettimeofday(&tv,NULL);
 

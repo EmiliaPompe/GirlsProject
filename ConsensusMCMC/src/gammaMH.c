@@ -18,9 +18,6 @@ void gammaMH(int *restrict dataP, int *restrict data_lenP,  int *restrict nP, do
   
   if(rP == NULL) {  //set up random numbers generator
 
-    time_t epoch_time;
-    epoch_time = time( NULL );
-
     struct timeval tv;
     gettimeofday(&tv,NULL);
 

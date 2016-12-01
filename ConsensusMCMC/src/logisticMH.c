@@ -44,9 +44,6 @@ void LogisticMH(int *restrict dataP, double *restrict zP, int *restrict data_len
   
   if(rP == NULL) {  //set up random numbers generator
 
-    time_t epoch_time;
-    epoch_time = time( NULL );
-
     struct timeval tv;
     gettimeofday(&tv,NULL);
 

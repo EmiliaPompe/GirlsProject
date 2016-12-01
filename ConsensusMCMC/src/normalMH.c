@@ -19,9 +19,6 @@ void normalMH(double *restrict dataP, int *restrict data_lenP,  int *restrict nP
   
   if(rP == NULL) {  //set up random numbers generator
 
-    time_t epoch_time;
-    epoch_time = time( NULL );
-
     struct timeval tv;
     gettimeofday(&tv,NULL);
 
