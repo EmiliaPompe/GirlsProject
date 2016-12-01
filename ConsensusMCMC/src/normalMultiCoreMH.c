@@ -12,7 +12,6 @@
 void NormalMultiCoreMH(int *restrict multicoreP, double *restrict dataP, int *restrict data_lenP,  int *restrict nP, double *restrict sigmaP, double *restrict mean_priorP, double *restrict sigma_priorP, double *restrict sigma_knownP, int *restrict sP, double *restrict x_0P, int *restrict num_coresP, double *restrict vec_xP)
 {
 
-  bool multicore = *multicoreP;
   int n, i, num_cores, k, remainder;
   double sigma, x, x_proposed, u, acc_prob, s, sigma_prior, mean_prior, sigma_known, prior_ratio, log_lik_difference;
   int acc_count;
