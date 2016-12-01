@@ -36,11 +36,9 @@ lambda <- clusterApplyLB(clust, shards, LogisticMH, n_iter=n_iter, sigma=sigma, 
 
 stopCluster(clust)
 
-df = data.frame(lapply(lambda, function(y) y))
-colnames(df) <- paste0('x', seq_len(nr_servers))
 
 #  Combine results
-parallel_chain = weightsComputation(df, method="sample variance")
+parallel_chain = weightsMultivariateComputation(lambda, method="sample variance")
 
 
 ############################################################################
