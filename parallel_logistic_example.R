@@ -21,7 +21,8 @@ burn_in = 0.2
 #  Split data into shards and run on 4 machines
 ############################################################################
 
-shards <- split(1:nrow(logistic_data_frame), rep(seq_len(nr_servers),each=nrow(logistic_data_frame)/nr_servers))
+shards <- split(sample(1:nrow(logistic_data_frame),nrow(logistic_data_frame), replace = FALSE),
+                rep(seq_len(nr_servers),times = nrow(logistic_data_frame)/nr_servers))
 shards = lapply(shards, function(x) logistic_data_frame[x,])
 
 clust <- makePSOCKcluster(names = c("greywagtail",
