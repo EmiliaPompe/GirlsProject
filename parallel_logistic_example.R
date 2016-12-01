@@ -36,11 +36,9 @@ lambda <- clusterApplyLB(clust, shards, LogisticMH, n_iter=n_iter, sigma=sigma, 
 
 stopCluster(clust)
 
-df = data.frame(lapply(lambda, function(y) y))
-colnames(df) <- paste0('x', seq_len(nr_servers))
 
 #  Combine results
-parallel_chain = weightsComputation(df, method="sample variance")
+parallel_chain = weightsMultivariateComputation(lambda, method="sample variance")
 
 
 ############################################################################
@@ -51,12 +49,12 @@ nr_servers <- 1
 
 clust <- makePSOCKcluster(names = c("greywagtail"))
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
-lambda <- clusterApplyLB(clust, shards, LogisticMH, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, LogisticMH, n_iter=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, s= 1, x_0 = x_0)
 stopCluster(clust)
 
 df = data.frame(lapply(lambda, function(y) y))
-colnames(df) <- paste0('x', seq_len(nr_servers))
-single_chain = df$x
+#colnames(df) <- paste0('x', seq_len(nr_servers))
+single_chain = df[ ,1]
 
 
 #################################################################################################################
@@ -64,10 +62,10 @@ single_chain = df$x
 #################################################################################################################
 
 par(mfrow=c(1,1))
-HistPlot(list(single_markov_chain, parallel_markov_chain, theoretical_distribution), 
-         method = c("1 machine", "4 machines", "theoretical posterior distribution"), burn_in = 0.3)
+HistPlot(list(single_chain, parallel_chain[,1]), 
+         method = c("1 machine", "4 machines"), burn_in = 0.3)
 
-QQPlot(single_markov_chain[burn_in:n_iter], parallel_markov_chain[burn_in:n_iter], line = TRUE)
+QQPlot(single_chain[burn_in:n_iter], parallel_chain[,1][burn_in:n_iter], line = TRUE)
 
-TracePlot(list(single_markov_chain, parallel_markov_chain), method = c('single machine', '4 machines'),  burn_in=0.3)
+TracePlot(list(single_chain, parallel_chain[,1]), method = c('single machine', '4 machines'),  burn_in=0.3)
 

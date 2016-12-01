@@ -43,7 +43,7 @@ LogisticMH <- function(data_frame,  n_iter, sigma, sigma_prior, mean_prior, s, x
             as.double(mean_prior), as.integer(s), as.double(x_0),  vec_xP=as.double(rep(0, (n_iter+1)*(ncol(z)))))
   
   result <- as.data.frame(matrix(ans$vec_xP, ncol = ncol(z), byrow=TRUE))
-  colnames(result) <- paste0('beta_', seq_len(result)-1)
+  colnames(result) <- paste0('beta_', seq_len(ncol(z))-1)
   return(result)
 }
 
