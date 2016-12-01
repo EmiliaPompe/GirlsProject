@@ -31,7 +31,7 @@ clust <- makePSOCKcluster(names = c("greywagtail",
 
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
 
-lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1,n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1, num_cores= 8, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
 
 stopCluster(clust)
 
@@ -51,7 +51,7 @@ shards <- split(observations, rep(seq_len(nr_servers),each=length(observations)/
 
 clust <- makePSOCKcluster(names = c("greywagtail"))
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
-lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, NormalMultiCoreMH, multicore=1, num_cores= 8, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
 stopCluster(clust)
 
 df = data.frame(lapply(lambda, function(y) y))
@@ -69,9 +69,7 @@ sigma_post = sqrt(1/(1/sigma_prior^2 + length(observations)/sigma_known^2))
 theoretical = rnorm(10000, mean_post, sigma_post)
 
 HistPlot(list(single_chain, parallel_chain, theoretical), method = c("1 machine, multicore", "4 machines, multicore", "Theoretical"), burn_in = burn_in)
-#HistPlot(list(single_chain, parallel_chain), method = c("1 machine, multicore", "4 machines, multicore"), burn_in = burn_in)
-
-cat(Sys.time() - time_start)
+TracePlot(list(single_chain, parallel_chain), method = c('single machine', '4 machines'),  burn_in=0.3)
 
 ############################################################################
 #  Compare different number of computers - DONE ON AMAZON

@@ -31,7 +31,7 @@ clust <- makePSOCKcluster(names = c("greywagtail",
 
 clusterEvalQ(cl = clust, devtools::load_all("~/Workspace/GirlsProject/ConsensusMCMC/"))
 
-lambda <- clusterApplyLB(clust, shards, LogisticMH, n=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s= nr_servers, x_0 = x_0)
+lambda <- clusterApplyLB(clust, shards, LogisticMH, n_iter=n_iter, sigma=sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, s= nr_servers, x_0 = x_0)
 
 stopCluster(clust)
 

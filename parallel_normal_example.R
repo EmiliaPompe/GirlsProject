@@ -1,7 +1,9 @@
 library(devtools)
 devtools::load_all("ConsensusMCMC")
 
-set.seed(15)
+############################################################################
+#  Generate data and specify params
+############################################################################
 
 sigma_known = 1
 observations <- rnorm(10000, 3 , sigma_known)
@@ -13,7 +15,11 @@ burn_in = 0.1*n_iter
 sigma = 0.01  # sigma for the proposal distribution
 mean_prior=0
 sigma_prior=1.0
-x_0 = 0
+x_0 = -5
+
+############################################################################
+#  Split data into shards and run on 4 machines
+############################################################################
 
 clust <- makePSOCKcluster(names = c("greywagtail",
                                     "greyheron",
@@ -29,8 +35,11 @@ stopCluster(clust)
 df = data.frame(lapply(lambda, function(y) y))
 colnames(df) <- paste0('x', seq_len(nr_servers))
 
-
 parallel_markov_chain = weightsComputation(df, method = "sample variance")
+
+############################################################################
+#  Run on a single machine
+############################################################################
 
 single_markov_chain = NormalMH(observations, n = n_iter, sigma = sigma, mean_prior=mean_prior, sigma_prior=sigma_prior, sigma_known=sigma_known, s=4, x_0 = x_0) 
 
